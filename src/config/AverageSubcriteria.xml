@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+ 
+<sqlMap namespace="averageSubcriteria">
+    <insert id="averageBySubcriteriaFacilitatingAgents" parameterClass="java.lang.Integer">
+        INSERT INTO average_subcriteria(`pc_subcriteria`, `period_criteria`, `period`, `total`)
+        select
+            pc_subcriteria.idpcs,
+            period_criteria.idpc,
+            period.idperiod,
+            round((sum(average_process.consensus) / count(average_process.consensus)) * pc_subcriteria.adjustment, 2)
+        from
+            period,
+            criteria,
+            period_criteria,
+            subcriteria,
+            pc_subcriteria,
+            pcs_process,
+            process,
+            average_process
+        where
+            period.idperiod = #period# and
+            period.period_processed = 0 and
+            period.idperiod = period_criteria.period and
+            criteria.idcriteria in (1,2,3,4,5) and
+            criteria.idcriteria = period_criteria.criteria and
+            period_criteria.idpc = pc_subcriteria.period_criteria and
+            subcriteria.idsubcriteria = pc_subcriteria.subcriteria and
+            pc_subcriteria.idpcs = pcs_process.pc_subcriteria and
+            process.idprocess = pcs_process.process and
+            average_process.pcs_process = pcs_process.idpcsp and
+            average_process.pc_subcriteria = pc_subcriteria.idpcs and
+            average_process.period_criteria = period_criteria.idpc and
+            average_process.period = period.idperiod 
+        group by period_criteria.idpc, pc_subcriteria.idpcs
+    </insert>
+    <insert id="averageBySubcriteriaResults" parameterClass="java.lang.Integer">
+        INSERT INTO average_subcriteria(`pc_subcriteria`, `period_criteria`, `period`, `partial`, `total`)
+        select
+            pc_subcriteria.idpcs,
+            period_criteria.idpc,
+            period.idperiod,
+            round(sum(average_process.consensus) / count(average_process.consensus), 2),
+            round(((round(sum(average_process.consensus) / count(average_process.consensus), 2)) * pc_subcriteria.percentage) * pc_subcriteria.adjustment, 2)
+        from
+            period,
+            criteria,
+            period_criteria,
+            subcriteria,
+            pc_subcriteria,
+            pcs_process,
+            process,
+            average_process
+        where
+            period.idperiod = #period# and
+            period.period_processed = 0 and
+            period.idperiod = period_criteria.period and
+            criteria.idcriteria in (6,7,8,9) and
+            criteria.idcriteria = period_criteria.criteria and
+            period_criteria.idpc = pc_subcriteria.period_criteria and
+            subcriteria.idsubcriteria = pc_subcriteria.subcriteria and
+            pc_subcriteria.idpcs = pcs_process.pc_subcriteria and
+            process.idprocess = pcs_process.process and
+            average_process.pcs_process = pcs_process.idpcsp and
+            average_process.pc_subcriteria = pc_subcriteria.idpcs and
+            average_process.period_criteria = period_criteria.idpc and
+            average_process.period = period.idperiod 
+        group by period_criteria.idpc, pc_subcriteria.idpcs
+    </insert>
+</sqlMap>

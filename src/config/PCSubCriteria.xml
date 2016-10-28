@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+ 
+<sqlMap namespace="pcsubcriteria">
+    <resultMap id="selectId" class="model.PCSubCriteria">
+        <result property="idpcs" column="idpcs"/>
+    </resultMap>
+    
+    <select id="selectIdPCSubCriteria" parameterClass="model.PCSubCriteria" resultMap="selectId">
+        SELECT idpcs FROM `pc_subcriteria`
+        WHERE 
+        subcriteria = #subcriteria# and 
+        period_criteria = #period_criteria# and 
+        period = #period#;
+    </select>
+    
+    <insert id="savePCSubCriteria" parameterClass="model.PCSubCriteria">
+        INSERT INTO `pc_subcriteria`(`subcriteria`, `period_criteria`, `period`, `adjustment`, `percentage`) 
+        VALUES (#subcriteria#,#period_criteria#,#period#,#adjustment#,#percentage#)
+    </insert>
+    
+</sqlMap>

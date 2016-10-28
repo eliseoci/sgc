@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version last-->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="subReportTotales" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="fe7a87e5-75c7-48d0-8bb5-eb1d37016c09">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="sgc_efqm"/>
+	<parameter name="PeriodSubReport" class="java.lang.Integer"/>
+	<queryString language="SQL">
+		<![CDATA[select 
+	sum(period_criteria.point_efqm) sumPointsMax, 
+    sum(average_criteria.value) sumPointsEfqm, 
+    round(sum(round(round(average_criteria.value / period_criteria.point_efqm,2)*100))/9) porc 
+from 
+	average_criteria,
+	criteria,
+	period,
+    period_criteria
+where
+	period.idperiod =  $P{PeriodSubReport}  and
+    period.idperiod = average_criteria.period and
+    average_criteria.period_criteria = period_criteria.idpc and
+    period_criteria.criteria = criteria.idcriteria]]>
+	</queryString>
+	<field name="sumPointsMax" class="java.math.BigDecimal"/>
+	<field name="sumPointsEfqm" class="java.lang.Double"/>
+	<field name="porc" class="java.math.BigDecimal"/>
+	<title>
+		<band height="200" splitType="Stretch">
+			<textField>
+				<reportElement x="10" y="0" width="150" height="30" uuid="90fab137-b29e-40b2-addb-38b897096171"/>
+				<textFieldExpression><![CDATA["Puntos Maximos EFQM: "+$F{sumPointsMax}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="210" y="0" width="150" height="30" uuid="bc3c5d70-044b-4024-80be-cc219f8ef5ef"/>
+				<textFieldExpression><![CDATA["Puntos EFQM: "+$F{sumPointsEfqm}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="380" y="0" width="160" height="30" uuid="883ada01-d226-4d62-9234-eecc7ceaa236"/>
+				<textFieldExpression><![CDATA["Porcentaje EFQM: "+$F{porc} + "%"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="27" y="50" width="500" height="140" uuid="77167549-751b-4921-a758-1d577323429b"/>
+				<textElement textAlignment="Center">
+					<font size="24" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[IF($F{sumPointsEfqm}.intValue() < 200,"No certifica",IF($F{sumPointsEfqm}.intValue() <=300, "Compromiso con la excelencia (2 Estrellas)",IF($F{sumPointsEfqm}.intValue() < 401 , "Reconocimiento a la excelencia (3 Estrellas)", IF($F{sumPointsEfqm}.intValue() <= 500 , "Reconocimiento a la excelencia (4 Estrellas)" , "Reconocimiento a la excelencia (5 Estrellas)" ) ) ) )]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+</jasperReport>

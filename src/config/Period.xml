@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+ 
+<sqlMap namespace="Period">
+    <resultMap id="PeriodResult" class="model.Period">
+        <result property="id" column="idperiod"/>
+        <result property="description" column="description"/>
+        <result property="processed" column="period_processed"/>
+    </resultMap>
+    
+    <resultMap id="ExistsPeriodResult" class="model.Period">
+        <result property="exists" column="ex"/>
+    </resultMap>
+    
+    <select id="getByIdPeriod" resultMap="PeriodResult" parameterClass="java.lang.Integer">
+        SELECT * FROM period 
+            WHERE idperiod = #id#
+    </select>
+    
+    <select id="getAllPeriod" resultMap="PeriodResult">
+        SELECT * FROM period;
+    </select>
+    
+    <select id="existsPeriod" resultMap="ExistsPeriodResult" parameterClass="java.lang.Integer">
+        SELECT count(*) ex FROM period where period.idperiod = #period# and period.period_processed = 0;
+    </select>
+    
+    <insert id="savePeriod" parameterClass="model.Period">
+        INSERT INTO period(`description`,`period_processed`) 
+            VALUES (#description#, 0);
+    </insert>
+    
+    <update id="updateDescriptionPeriod" parameterClass="model.Period">
+        UPDATE period SET description= #description# WHERE idperiod= #id#
+    </update>
+    
+    <update id="updateProcessPeriod" parameterClass="java.lang.Integer">
+        UPDATE `period` SET `period_processed`=1 WHERE `idperiod` = #id#
+    </update>
+    
+    <delete id="deletePeriod" parameterClass="java.lang.Integer">
+        DELETE FROM period WHERE idperiod= #id#
+    </delete>
+</sqlMap>

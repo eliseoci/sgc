@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+ 
+<sqlMap namespace="quiz">
+    <resultMap id="QuizResult" class="model.Quiz">
+        <result property="idPeriod" column="idPeriod"/>
+        <result property="idpc" column="idpc"/>
+        <result property="idpcs" column="idpcs"/>
+        <result property="idpcsp" column="idpcsp"/>
+        <result property="idpcspq" column="idpcspq"/>
+        <result property="period" column="period"/>
+        <result property="criteria" column="criteria"/>
+        <result property="subcriteria" column="subcriteria"/>
+        <result property="process" column="process"/>
+        <result property="question" column="question"/>
+    </resultMap>
+    
+    <select id="getAllQuiz" resultMap="QuizResult" parameterClass="java.lang.Integer">
+        select
+            period.idperiod,
+            period_criteria.idpc,
+            pc_subcriteria.idpcs,
+            pcs_process.idpcsp,
+            pcsp_questions.idpcspq,
+            period.description period,
+            criteria.description criteria,
+            subcriteria.description subcriteria,
+            process.description process,
+            questions.question question
+        from
+            period,
+            criteria,
+            period_criteria,
+            subcriteria,
+            pc_subcriteria,
+            pcs_process,
+            process,
+            pcsp_questions,
+            questions
+        where
+            period.idperiod = #period# and
+            period.period_processed = 0 and
+            period.idperiod = period_criteria.period and
+            criteria.idcriteria = period_criteria.criteria and
+            period_criteria.idpc = pc_subcriteria.period_criteria and
+            subcriteria.idsubcriteria = pc_subcriteria.subcriteria and
+            pc_subcriteria.idpcs = pcs_process.pc_subcriteria and
+            process.idprocess = pcs_process.process and
+            pcs_process.idpcsp = pcsp_questions.pcs_process and
+            pcsp_questions.questions_idquestions = questions.idquestions
+        order by criteria.idcriteria, subcriteria.idsubcriteria, process.idprocess, questions.idquestions;
+    </select>
+</sqlMap>

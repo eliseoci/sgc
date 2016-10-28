@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMapConfig
+PUBLIC "-//ibatis.apache.org//DTD SQL Map Config 2.0//EN"
+"http://ibatis.apache.org/dtd/sql-map-config-2.dtd">
+<sqlMapConfig>    
+    <transactionManager type="JDBC">
+        <dataSource type="SIMPLE">
+            <property name="JDBC.Driver"
+                      value="com.mysql.jdbc.Driver"/>
+            <property name="JDBC.ConnectionURL"
+                      value="jdbc:mysql://localhost/sgc_efqm"/>
+            <property name="JDBC.Username" value="sgc"/>
+            <property name="JDBC.Password"  value="sgc"/>
+        </dataSource>
+    </transactionManager>
+    <sqlMap resource="config/Improvements.xml" />
+    <sqlMap resource="config/Question.xml" />
+    <sqlMap resource="config/Process.xml" />
+    <sqlMap resource="config/Criteria.xml" />
+    <sqlMap resource="config/Subcriteria.xml" />
+    <sqlMap resource="config/Quiz.xml" />
+    <sqlMap resource="config/Answer.xml" />
+    <sqlMap resource="config/Response.xml" />
+    <sqlMap resource="config/AverageResponses.xml" />
+    <sqlMap resource="config/AverageProcess.xml" />
+    <sqlMap resource="config/AverageSubcriteria.xml" />
+    <sqlMap resource="config/AverageCriteria.xml" />
+    <sqlMap resource="config/Period.xml" />
+    <sqlMap resource="config/PeriodCriteria.xml" />
+    <sqlMap resource="config/PCSubCriteria.xml" />
+    <sqlMap resource="config/PCSProcess.xml" />
+    <sqlMap resource="config/PCSPQuestion.xml" />
+    <sqlMap resource="config/Priority.xml" />
+    <sqlMap resource="config/Status.xml" />
+</sqlMapConfig>

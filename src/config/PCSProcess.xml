@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+ 
+<sqlMap namespace="pcsprocess">
+    <resultMap id="selectId" class="model.PCSProcess">
+        <result property="idpcsp" column="idpcsp"/>
+    </resultMap>
+    
+    <select id="selectIdPCSProcess" parameterClass="model.PCSProcess" resultMap="selectId">
+        SELECT idpcsp FROM `pcs_process`
+        WHERE 
+        process = #process# and 
+        pc_subcriteria = #pc_subcriteria# and 
+        period_criteria = #period_criteria# and 
+        period = #period#;
+    </select>
+    
+    <insert id="savePCSProcess" parameterClass="model.PCSProcess">
+        INSERT INTO `pcs_process`(`process`, `pc_subcriteria`, `period_criteria`, `period`) 
+        VALUES (#process#,#pc_subcriteria#,#period_criteria#,#period#)
+    </insert>
+    
+</sqlMap>

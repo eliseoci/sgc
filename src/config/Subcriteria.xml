@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+ 
+<sqlMap namespace="subcriteria">
+    <resultMap id="SubcriteriaResult" class="model.Subcriteria">
+        <result property="id" column="idsubcriteria"/>
+        <result property="description" column="description"/>
+    </resultMap>
+    
+    <resultMap id="GetAll" class="model.Subcriteria">
+        <result property="id" column="idsubcriteria"/>
+        <result property="description" column="description"/>        
+    </resultMap>
+    
+    <select id="getAllSubcriteria" resultMap="GetAll">
+        SELECT * FROM subcriteria;
+    </select>
+        
+    <select id="getSubcriteriaByCriteria" resultMap="SubcriteriaResult" parameterClass="java.lang.Integer">
+        SELECT * FROM subcriteria where idsubcriteria = #id#;
+    </select>
+    
+    <insert id="saveSubCriteria" parameterClass="model.Subcriteria">
+        INSERT INTO subcriteria(`description`) 
+            VALUES (#description#)
+    </insert>
+    
+    <update id="updateSubCriteria" parameterClass="model.Subcriteria">
+        UPDATE subcriteria SET `description`=#description# WHERE `idsubcriteria` = #id#
+    </update>
+    
+    <delete id="deleteSubCriteria" parameterClass="java.lang.Integer">
+        DELETE FROM subcriteria WHERE `idsubcriteria`= #id#
+    </delete>
+</sqlMap>

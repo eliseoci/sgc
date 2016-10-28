@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+ 
+<sqlMap namespace="averageprocess" >
+    <insert id="averageByProcess" parameterClass="java.lang.Integer">
+        INSERT INTO average_process(`pcs_process`, `pc_subcriteria`, `period_criteria`,`period`, `min`, `max`, `consensus`) 
+        select
+            pcs_process.idpcsp,            
+            pc_subcriteria.idpcs,
+            period_criteria.idpc,
+            period.idperiod,
+            min(average_responses.value) min,
+            max(average_responses.value) max,
+            ROUND(sum(average_responses.value) / count(average_responses.value), 2) average
+        from
+            period,
+            criteria,
+            period_criteria,
+            subcriteria,
+            pc_subcriteria,
+            pcs_process,
+            process,
+            average_responses
+        where
+            period.idperiod = #period# and
+            period.period_processed = 0 and
+            period.idperiod = period_criteria.period and
+            criteria.idcriteria = period_criteria.criteria and
+            period_criteria.idpc = pc_subcriteria.period_criteria and
+            subcriteria.idsubcriteria = pc_subcriteria.subcriteria and
+            pc_subcriteria.idpcs = pcs_process.pc_subcriteria and
+            process.idprocess = pcs_process.process and
+            pcs_process.idpcsp = average_responses.process and
+            pc_subcriteria.idpcs = average_responses.subcriteria and
+            period_criteria.idpc = average_responses.criteria and
+            period.idperiod = average_responses.period
+        group by period_criteria.idpc, pc_subcriteria.idpcs, pcs_process.idpcsp
+    </insert>
+</sqlMap>

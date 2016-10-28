@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+ 
+<sqlMap namespace="averageCriterio">
+    <resultMap id="CompareResult" class="model.ResultCriteria">
+        <result property="period" column="period"/>
+        <result property="description" column="description"/>
+        <result property="value" column="value"/>
+    </resultMap>
+    <insert id="averageByCriterioFacilitatingAgents" parameterClass="java.lang.Integer">
+        INSERT INTO average_criteria(`period_criteria`, `period`, `value`)
+        select
+            period_criteria.idpc,
+            period.idperiod,
+            round((sum(average_subcriteria.total)/Count(average_subcriteria.total)), 2)
+        from
+            period,
+            criteria,
+            period_criteria,
+            subcriteria,
+            pc_subcriteria,
+            average_subcriteria
+        where
+            period.idperiod = #period# and
+            period.period_processed = 0 and
+            period.idperiod = period_criteria.period and
+            criteria.idcriteria in (1,2,3,4,5) and
+            criteria.idcriteria = period_criteria.criteria and
+            period_criteria.idpc = pc_subcriteria.period_criteria and
+            subcriteria.idsubcriteria = pc_subcriteria.subcriteria and
+            average_subcriteria.pc_subcriteria = pc_subcriteria.idpcs and
+            average_subcriteria.period_criteria = period_criteria.idpc and
+            average_subcriteria.period = period.idperiod
+        group by period_criteria.idpc
+    </insert>
+    <insert id="averageByCriterioSubcriteriaResults" parameterClass="java.lang.Integer">
+        INSERT INTO average_criteria(`period_criteria`, `period`, `value`)
+        select
+            period_criteria.idpc,
+            period.idperiod,
+            round((sum(average_subcriteria.total)/Count(average_subcriteria.total)), 2)
+        from
+            period,
+            criteria,
+            period_criteria,
+            subcriteria,
+            pc_subcriteria,
+            average_subcriteria
+        where
+            period.idperiod = #period# and
+            period.period_processed = 0 and
+            period.idperiod = period_criteria.period and
+            criteria.idcriteria in (6,7,8,9) and
+            criteria.idcriteria = period_criteria.criteria and
+            period_criteria.idpc = pc_subcriteria.period_criteria and
+            subcriteria.idsubcriteria = pc_subcriteria.subcriteria and
+            average_subcriteria.pc_subcriteria = pc_subcriteria.idpcs and
+            average_subcriteria.period_criteria = period_criteria.idpc and
+            average_subcriteria.period = period.idperiod
+        group by period_criteria.idpc
+    </insert>
+    <select id="getCriteriaResultsFromPeriod" resultMap="CompareResult" parameterClass="java.lang.Integer">
+        SELECT p.description AS period, c.description, ac.value
+        FROM average_criteria AS ac
+        INNER JOIN period_criteria AS pc
+        ON ac.period_criteria = pc.idpc
+        INNER JOIN criteria as c
+        ON c.idcriteria = pc.criteria
+        INNER JOIN period as p
+        ON p.idperiod = pc.period
+        WHERE ac.period = #period#
+    </select>
+    
+</sqlMap>

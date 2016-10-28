@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+ 
+<sqlMap namespace="pcspquestion">
+
+    
+    <insert id="savePCSPQuestion" parameterClass="model.PCSPQuestion">
+        INSERT INTO `pcsp_questions`(`questions_idquestions`, `pcs_process`, `pc_subcriteria`, `period_criteria`, `period`) 
+        VALUES (#questions_idquestions#,#pcs_process#,#pc_subcriteria#,#period_criteria#,#period#)
+    </insert>
+    
+</sqlMap>

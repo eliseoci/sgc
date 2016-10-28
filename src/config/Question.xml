@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+ 
+<sqlMap namespace="question">
+    <resultMap id="QuestionResult" class="model.Question">
+        <result property="id" column="idquestions"/>
+        <result property="question" column="question"/>
+    </resultMap>
+    <resultMap id="QuestionById" class="model.Question">
+        <result property="id" column="idquestions"/>
+        <result property="question" column="question"/>
+    </resultMap>
+    <resultMap id="selectId" class="model.Question">
+        <result property="id" column="idquestions"/>
+    </resultMap>
+    
+    <select id="selectIdQuestion" parameterClass="model.Question" resultMap="selectId">
+        SELECT max(idquestions) idquestions FROM questions 
+        WHERE question = #question#
+    </select>
+    
+    <insert id="saveQuestion" parameterClass="model.Question">
+        INSERT INTO 
+        questions(question) 
+        VALUES (#question#);
+    </insert>
+   
+    <delete id="deleteQuestion" parameterClass="java.lang.Integer">
+        DELETE FROM questions
+        WHERE idquestions=#id#;
+    </delete>
+   
+    <update id="updateQuestion" parameterClass="model.Question">
+        UPDATE questions
+        SET question=#question#
+        WHERE idquestions=#id#;
+    </update>
+    
+    <select id="getById" resultMap="QuestionById" parameterClass="java.lang.Integer">
+        SELECT * FROM questions where idquestions=#id#;
+    </select>
+    
+    <select id="getAllQuestions" resultMap="QuestionResult">
+        SELECT * FROM  questions ;
+    </select>
+</sqlMap>

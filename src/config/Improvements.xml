@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+ 
+<sqlMap namespace="improvements">
+    <resultMap id="ImprovementsResult" class="model.Improvements">
+        <result property="idimprovements" column="idimprovements"/>
+        <result property="title" column="title"/>
+        <result property="description" column="description"/>
+        <result property="period" column="period"/>
+        <result property="priority" column="priority"/>
+        <result property="status" column="status"/>
+    </resultMap>
+    
+    <select id="getAllImprovements" parameterClass="java.lang.Integer" resultMap="ImprovementsResult">
+        SELECT * FROM improvements WHERE period = #id#;
+    </select>
+    
+    <insert id="saveImprovement" parameterClass="model.Improvements">
+        INSERT INTO `improvements`(`title`, `description`, `period`, `priority`, `status`) 
+            VALUES (#title#,#description#,#period#,#priority#,#status#)
+    </insert>
+    
+    <update id="updateImprovement" parameterClass="model.Improvements">
+        UPDATE `improvements` SET 
+            `title`=#title#,
+            `description`=#description#,
+            `period`=#period#,
+            `priority`=#priority#,
+            `status`=#status# 
+        WHERE `idimprovements` = #idimprovements#
+    </update>
+    
+    <delete id="deleteImprovement" parameterClass="java.lang.Integer">
+        DELETE FROM `improvements` WHERE `idimprovements`= #id#
+    </delete>
+   
+    <select id="getByPkImprovement" parameterClass="java.lang.Integer" resultMap="ImprovementsResult">
+        SELECT * FROM improvements WHERE idimprovements = #id#;
+    </select>
+    
+</sqlMap>

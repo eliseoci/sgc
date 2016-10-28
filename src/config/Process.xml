@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+ 
+<sqlMap namespace="groups">
+    <!--<resultMap id="GroupsResult" class="model.Process">
+        <result property="idgroups" column="idgroups"/>
+        <result property="description" column="description"/>
+        <result property="subcriteria" column="subcriteria"/>
+    </resultMap>
+    
+    <resultMap id="AllProcessResult" class="model.Process">
+        <result property="idgroups" column="idgroups"/>
+        <result property="criteriaDescription" column="desCr"/>
+        <result property="subcriteriaDescription" column="desSC"/>
+        <result property="description" column="description"/>
+    </resultMap>
+    -->
+    <resultMap id="ById" class="model.Process">
+        <result property="id" column="idprocess"/>
+        <result property="description" column="description"/>
+    </resultMap>
+    
+    <resultMap id="GetAll" class="model.Process">
+        <result property="id" column="idprocess"/>
+        <result property="description" column="description"/>        
+    </resultMap>
+
+    <select id="getAllProcess" resultMap="GetAll">
+        SELECT * FROM process;
+    </select>
+    
+    <select id="getProcessById" resultMap="ById" parameterClass="java.lang.Integer">
+        SELECT * FROM process where idprocess = #id#;
+    </select>
+    <!--
+    
+    <select id="getAllGroupsBySubcriteria" resultMap="GroupsResult" parameterClass="java.lang.Integer">
+        SELECT * FROM groups where subcriteria = #id#;
+    </select>
+    -->
+    <insert id="saveProcess" parameterClass="model.Process">
+        INSERT INTO process(`description`) 
+            VALUES (#description#)
+    </insert>
+    
+    <update id="updateProcess" parameterClass="model.Process">
+        UPDATE `process` SET `description`=#description#
+            where idprocess = #id#;
+    </update>
+    <!--
+    <delete id="deleteProcess" parameterClass="java.lang.Integer">
+        DELETE FROM `groups` WHERE `idgroups`= #id#
+    </delete>-->
+</sqlMap>

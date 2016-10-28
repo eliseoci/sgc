@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+ 
+<sqlMap namespace="status">
+    <resultMap id="StatusResult" class="model.Status">
+        <result property="idstatus" column="idstatus"/>
+        <result property="description" column="description"/>
+    </resultMap>
+    
+    <select id="getAllStatus" resultMap="StatusResult">
+        select * from status;</select>
+</sqlMap>

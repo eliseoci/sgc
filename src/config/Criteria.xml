@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+ 
+<sqlMap namespace="criteria">
+    <resultMap id="CriteriaResult" class="model.Criteria">
+        <result property="id" column="idcriteria"/>
+        <result property="description" column="description"/>
+    </resultMap>
+    
+    <select id="getAllCriteria" resultMap="CriteriaResult">
+        SELECT * FROM criteria;
+    </select>
+    
+    <select id="getAllByPeriod" parameterClass="java.lang.String">
+        SELECT 
+            pc.idpc,
+            pc.period,
+            c.description,
+            pc.point_efqm
+        FROM 
+            period p,
+            criteria c,
+            period_criteria pc
+        where
+            p.description = #period# and
+            p.idperiod = pc.period and
+            c.idcriteria = pc.criteria;
+    </select>
+    
+    <select id="getCriteriaById" resultMap="CriteriaResult" parameterClass="java.lang.Integer">
+        SELECT * FROM criteria WHERE idcriteria = #id#;
+    </select>
+    
+    <insert id="saveCriteria" parameterClass="model.Criteria">
+        INSERT INTO criteria(`description`) 
+            VALUES (#description#);
+    </insert>
+    
+    <update id="updateCriteria" parameterClass="model.Criteria">
+        UPDATE criteria SET `description`= #description# WHERE `idcriteria`= #id#
+    </update>
+    
+    <delete id="deleteCriteria" parameterClass="java.lang.Integer">
+        DELETE FROM `criteria` WHERE `idcriteria`= #id#
+    </delete>
+</sqlMap>

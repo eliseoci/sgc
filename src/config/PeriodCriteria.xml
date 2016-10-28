@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+ 
+<sqlMap namespace="periodcriteria">
+    <resultMap id="selectId" class="model.PeriodCriteria">
+        <result property="idpc" column="idpc"/>
+    </resultMap>
+    
+    <select id="selectIdPeriodCriteria" parameterClass="model.PeriodCriteria" resultMap="selectId">
+        SELECT idpc FROM `period_criteria` 
+        WHERE criteria = #criteria# and period = #period#;
+    </select>
+    
+    <select id="getAllCriteriaInPeriod" parameterClass="java.lang.Integer">
+        SELECT * FROM `period_criteria`
+        WHERE period_criteria.period = #id#;
+    </select>
+    
+    <insert id="savePeriodCriteria" parameterClass="model.PeriodCriteria">
+        INSERT INTO `period_criteria`(`criteria`, `period`, `point_efqm`) 
+        VALUES (#criteria#, #period#, #point#)
+    </insert>
+    
+</sqlMap>

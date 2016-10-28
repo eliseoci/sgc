@@ -1,0 +1,7 @@
+Instalacion:
+(La base de datos y la aplicacion deben estar en la misma PC)
+
+1-Crear una base de datos de nombre sgc_efqm
+1-Ejecutar script sgc_efqm.sql
+2-En mysql crear un usuario de nombre: sgc y pass: sgc, con host: localhost y privilegios solo al schema sgc_efqm
+3-Ejecutar GestionCalidad.jar (SGC/GestionCalidad.jar)

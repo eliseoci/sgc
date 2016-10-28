@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+ 
+<sqlMap namespace="reponse">
+    <insert id="insertResponse" parameterClass="model.Response">
+        INSERT INTO `responses_people`(`hash`, `type_answer`, `pcsp_questions`, `pcs_process`, `pc_subcriteria`, `period_criteria`, `period`) 
+        VALUES (#GUID#,#answer#,#idpcspq#,#idpcsp#,#idpcs#,#idpc#,#idPeriod#)
+    </insert>
+</sqlMap>

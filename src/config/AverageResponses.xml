@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+ 
+<sqlMap namespace="averageResponses">
+    <insert id="averageByResponses" parameterClass="model.AverageByResponses">
+        INSERT INTO average_responses(`criteria`, `subcriteria`, `process`, `value`, `period`)
+        select
+            period_criteria.idpc,
+            pc_subcriteria.idpcs,
+            pcs_process.idpcsp,
+            ROUND(sum(type_answer.value) / count(type_answer.value),2),
+            period.idperiod
+        from
+            period,
+            criteria,
+            period_criteria,
+            subcriteria,
+            pc_subcriteria,
+            pcs_process,
+            process,
+            pcsp_questions,
+            questions,
+            responses_people, 
+            type_answer
+        where
+            responses_people.hash = #GUID# and 
+            responses_people.period = #period# and
+            responses_people.period = period.idperiod and
+            period.period_processed = 0 and
+            period.idperiod = period_criteria.period and
+            criteria.idcriteria = period_criteria.criteria and
+            period_criteria.idpc = pc_subcriteria.period_criteria and
+            subcriteria.idsubcriteria = pc_subcriteria.subcriteria and
+            pc_subcriteria.idpcs = pcs_process.pc_subcriteria and
+            process.idprocess = pcs_process.process and
+            pcs_process.idpcsp = pcsp_questions.pcs_process and
+            pcsp_questions.questions_idquestions = questions.idquestions and
+            pcsp_questions.idpcspq = responses_people.pcsp_questions and
+            type_answer.idta = responses_people.type_answer
+        group by period_criteria.idpc, pc_subcriteria.idpcs, pcs_process.idpcsp
+    </insert>
+</sqlMap>

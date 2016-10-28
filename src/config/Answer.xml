@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+ 
+<sqlMap namespace="answer">
+    <resultMap id="AnswerResult" class="model.Answer">
+        <result property="id" column="idta"/>
+        <result property="description" column="description"/>
+    </resultMap>
+    
+    <select id="getAllAnswer" resultMap="AnswerResult" parameterClass="java.lang.Integer">
+        select 
+            type_answer.idta,
+            answer.description
+        from
+            period_criteria,
+            criteria,
+            type,
+            type_answer,
+            answer
+        where
+            period_criteria.idpc = #id# and
+            period_criteria.criteria = criteria.idcriteria and
+            type.idtype = criteria.type and
+            type_answer.type = type.idtype and
+            type_answer.answer = answer.idanswer
+    </select>
+</sqlMap>
