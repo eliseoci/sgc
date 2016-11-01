@@ -10,9 +10,11 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
-import view.WindowMain;
 import de.javasoft.plaf.synthetica.SyntheticaBlackEyeLookAndFeel;
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.text.ParseException;
+import view.LoginForm;
 
 /**
  *
@@ -27,7 +29,10 @@ public class main {
     public static void main(String[] args) throws ParseException {
         try {
             UIManager.setLookAndFeel(new SyntheticaBlackEyeLookAndFeel());
-            WindowMain windowMain = new WindowMain();
+            LoginForm windowMain = new LoginForm();
+            Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+            windowMain.setTitle(".:: Sistema EFQM - UTN-FRT ::.");
+            windowMain.setLocation(dim.width/2-windowMain.getSize().width/2, dim.height/2-windowMain.getSize().height/2);
             windowMain.setVisible(true);
         } catch (UnsupportedLookAndFeelException ex) {
             Logger.getLogger(main.class.getName()).log(Level.SEVERE, null, ex);

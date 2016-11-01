@@ -32,4 +32,5 @@ PUBLIC "-//ibatis.apache.org//DTD SQL Map Config 2.0//EN"
     <sqlMap resource="config/PCSPQuestion.xml" />
     <sqlMap resource="config/Priority.xml" />
     <sqlMap resource="config/Status.xml" />
+    <sqlMap resource="config/User.xml" />
 </sqlMapConfig>
