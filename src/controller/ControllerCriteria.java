@@ -11,6 +11,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import model.Criteria;
+import org.apache.logging.log4j.LogManager;
 import repository.RepositoryCriteria;
 import view.criterias.FormCriteria;
 import view.criterias.ListCriteria;
@@ -22,7 +23,7 @@ import view.criterias.ListCriteria;
 public class ControllerCriteria {
 
     private RepositoryCriteria repositoryCriteria;
-
+    private static final org.apache.logging.log4j.Logger logger = LogManager.getLogger(ControllerCriteria.class);
     public ControllerCriteria() {
         repositoryCriteria = new RepositoryCriteria();
     }
@@ -48,6 +49,7 @@ public class ControllerCriteria {
                 Criteria criteria = new Criteria();
                 criteria.setDescription(view.getTxtCriteria().getText());
                 repositoryCriteria.save(criteria);
+                logger.trace("Criterio creado");
                 view.dispose();
             } catch (SQLException ex) {
                 JOptionPane.showMessageDialog(view, "Error al guardar el nuevo Criterio.", "Error", JOptionPane.ERROR_MESSAGE);
@@ -64,6 +66,7 @@ public class ControllerCriteria {
                 criteria.setId(view.getId());
                 criteria.setDescription(view.getTxtCriteria().getText());
                 repositoryCriteria.update(criteria);
+                logger.trace("Criterio #" + view.getId() + " actualizado");
                 view.dispose();
             } catch (SQLException ex) {
                 JOptionPane.showMessageDialog(view, "Error al actualizar el Criterio.", "Error", JOptionPane.ERROR_MESSAGE);
@@ -76,6 +79,7 @@ public class ControllerCriteria {
     public void deleteCriteria(ListCriteria view ,int id){
         try {
             repositoryCriteria.delete(Integer.valueOf(id));
+            logger.trace("Criterio #" + id + " eliminado");
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(view, "Error al eliminar el Criterio.", "Error", JOptionPane.ERROR_MESSAGE);
         }

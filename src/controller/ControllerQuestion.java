@@ -14,6 +14,7 @@ import model.Criteria;
 import model.Process;
 import model.Question;
 import model.Subcriteria;
+import org.apache.logging.log4j.LogManager;
 import repository.RepositoryCriteria;
 import repository.RepositoryProcess;
 import repository.RepositoryQuestion;
@@ -29,7 +30,7 @@ import view.questions.ListQuestion;
 public class ControllerQuestion {
 
     private RepositoryQuestion repositoryQuestions;
-
+    private static final org.apache.logging.log4j.Logger logger = LogManager.getLogger(ControllerQuestion.class);
     public ControllerQuestion() {
         repositoryQuestions = new RepositoryQuestion();
     }
@@ -51,6 +52,7 @@ public class ControllerQuestion {
                 Question question = new Question();
                 question.setQuestion(addQuestion.getTxtQuestion().getText());
                 repositoryQuestions.save(question);
+                logger.trace("Pregunta creada");
                 addQuestion.dispose();
             } catch (SQLException ex) {
                 JOptionPane.showMessageDialog(addQuestion, "Error al guardar la nueva Pregunta", "Error", JOptionPane.ERROR_MESSAGE);
@@ -68,6 +70,7 @@ public class ControllerQuestion {
                 question.setId(formQuestion.getId());
                 question.setQuestion(formQuestion.getTxtQuestion().getText());
                 repositoryQuestions.update(question);
+                logger.trace("Pregunta #" + formQuestion.getId() + " actualizada");
                 formQuestion.dispose();
             } catch (SQLException ex) {
                 JOptionPane.showMessageDialog(formQuestion, "Error al actualizar la Pregunta", "Error", JOptionPane.ERROR_MESSAGE);
@@ -81,6 +84,7 @@ public class ControllerQuestion {
     public void delete(ListQuestion lq, int id) {
         try {
             repositoryQuestions.delete(id);
+            logger.trace("Preegunta #" + id + " eliminada");
         } catch (Exception e) {
             JOptionPane.showMessageDialog(lq, "Error al eliminar pregunta.", "Error", JOptionPane.ERROR_MESSAGE);
         }

@@ -13,6 +13,7 @@ import javax.swing.JOptionPane;
 import model.Improvements;
 import model.Priority;
 import model.Status;
+import org.apache.logging.log4j.LogManager;
 import repository.RepositoryImprovements;
 import repository.RepositoryPriority;
 import repository.RepositoryStatus;
@@ -30,6 +31,7 @@ public class ControllerImprovements {
     private RepositoryPriority repositoryPriority;
     private RepositoryStatus repositoryStatus;
     private int period;
+    private static final org.apache.logging.log4j.Logger logger = LogManager.getLogger(ControllerImprovements.class);
 
     public ControllerImprovements() {
         repositoryImprovements = new RepositoryImprovements();
@@ -91,6 +93,7 @@ public class ControllerImprovements {
                     improvements.setPriority(((Priority) view.getCbPriority().getSelectedItem()).getIdpriority());
                     improvements.setStatus(((Status) view.getCbStatus().getSelectedItem()).getIdstatus());
                     repositoryImprovements.save(improvements);
+                    logger.trace("Mejora creada");
                     view.dispose();
                 } catch (SQLException ex) {
                     JOptionPane.showMessageDialog(view, "Ocurrio un error al guardar.", "Error", JOptionPane.ERROR_MESSAGE);
@@ -146,6 +149,7 @@ public class ControllerImprovements {
                     improvements.setPriority(((Priority) view.getCbPriority().getSelectedItem()).getIdpriority());
                     improvements.setStatus(((Status) view.getCbStatus().getSelectedItem()).getIdstatus());
                     repositoryImprovements.update(improvements);
+                    logger.trace("Mejora #" + view.getId() + " actualizada");
                     view.dispose();
                 } catch (Exception ex) {
                     JOptionPane.showMessageDialog(view, "Ocurrio un error al guardar.", "Error", JOptionPane.ERROR_MESSAGE);

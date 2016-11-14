@@ -309,7 +309,7 @@ public class FormConfig extends javax.swing.JDialog {
 
         jLabel5.setText("Ajuste:");
 
-        jLabel6.setText("Proc.:");
+        jLabel6.setText("Porcentaje:");
 
         btnAddSubCriteria.setText("Nuevo Subcriterio");
         btnAddSubCriteria.addActionListener(new java.awt.event.ActionListener() {

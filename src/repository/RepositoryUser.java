@@ -16,4 +16,8 @@ public class RepositoryUser {
     public User getUser(String username) throws SQLException{
         return (User) CustomSqlMap.getInstance().queryForObject("getUser", username);
     }
+
+    public void createUser(User user) throws SQLException {
+        CustomSqlMap.getInstance().insert("saveUser", user);
+    }
 }

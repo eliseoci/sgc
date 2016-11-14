@@ -6,8 +6,8 @@
 
 package gestioncalidad;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import de.javasoft.plaf.synthetica.SyntheticaBlackEyeLookAndFeel;
@@ -21,7 +21,7 @@ import view.LoginForm;
  * @author winvm
  */
 public class main {
-
+    
     /**
      * @param args the command line arguments
      * @throws java.text.ParseException
@@ -35,7 +35,7 @@ public class main {
             windowMain.setLocation(dim.width/2-windowMain.getSize().width/2, dim.height/2-windowMain.getSize().height/2);
             windowMain.setVisible(true);
         } catch (UnsupportedLookAndFeelException ex) {
-            Logger.getLogger(main.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println(ex);
         }
     }
     

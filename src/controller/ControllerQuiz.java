@@ -16,6 +16,7 @@ import model.Answer;
 import model.AverageByResponses;
 import model.Quiz;
 import model.Response;
+import org.apache.logging.log4j.LogManager;
 import repository.RepositoryAnswer;
 import repository.RepositoryAverage;
 import repository.RepositoryQuiz;
@@ -38,7 +39,8 @@ public class ControllerQuiz {
     private List<Response> responses;
     private int question;
     private final String GUID;
-
+    private static final org.apache.logging.log4j.Logger logger = LogManager.getLogger(ControllerQuiz.class);
+    
     public ControllerQuiz() {
         repositoryAnswer = new RepositoryAnswer();
         repositoryQuiz = new RepositoryQuiz();
@@ -120,5 +122,6 @@ public class ControllerQuiz {
     public void saveRsponses(FormQuiz view) throws SQLException {
         repositoryResponse.insertAllResponses(responses);
         repositoryAverage.averageByResponses(new AverageByResponses(view.getIdPeriod(), GUID));
+        logger.trace("Respuestas insertadas");
     }
 }

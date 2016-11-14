@@ -10,6 +10,7 @@ import java.util.List;
 import javax.swing.JOptionPane;
 import model.Criteria;
 import model.Subcriteria;
+import org.apache.logging.log4j.LogManager;
 import repository.RepositoryCriteria;
 import repository.RepositorySubcriteria;
 import view.subcriteria.FormSubC;
@@ -23,7 +24,7 @@ public class ControllerSubCriteria {
 
     private RepositorySubcriteria repositorySubcriteria;
     private RepositoryCriteria repositoryCriteria;
-
+    private static final org.apache.logging.log4j.Logger logger = LogManager.getLogger(ControllerSubCriteria.class);
     public ControllerSubCriteria() {
         repositorySubcriteria = new RepositorySubcriteria();
         repositoryCriteria = new RepositoryCriteria();
@@ -59,6 +60,7 @@ public class ControllerSubCriteria {
                 Subcriteria subcriteria = new Subcriteria();
                 subcriteria.setDescription(view.getTxtSubC().getText());
                 repositorySubcriteria.save(subcriteria);
+                logger.trace("Subcriterio creado");
                 view.dispose();
             } catch (SQLException ex) {
                 JOptionPane.showMessageDialog(view, "Error al guardar el Sub Criterio.", "Error", JOptionPane.ERROR_MESSAGE);
@@ -75,6 +77,7 @@ public class ControllerSubCriteria {
                 subcriteria.setId(view.getId());
                 subcriteria.setDescription(view.getTxtSubC().getText());
                 repositorySubcriteria.update(subcriteria);
+                logger.trace("Subcriterio #" + view.getId() + " actualizado");
                 view.dispose();
             } catch (SQLException ex) {
                 JOptionPane.showMessageDialog(view, "Error al actualizar el Sub Criterio.", "Error", JOptionPane.ERROR_MESSAGE);
@@ -87,6 +90,7 @@ public class ControllerSubCriteria {
     public void delete(ListSubC view, int id) {
         try {
             repositorySubcriteria.delete(Integer.valueOf(id));
+            logger.trace("Subcriterio #" + id + " eliminado");
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(view, "Error al eliminar el Sub Criterio.", "Error", JOptionPane.ERROR_MESSAGE);
         }

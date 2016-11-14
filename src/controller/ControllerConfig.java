@@ -19,6 +19,7 @@ import model.PeriodCriteria;
 import model.Subcriteria;
 import model.Process;
 import model.Question;
+import org.apache.logging.log4j.LogManager;
 import repository.RepositoryCriteria;
 import repository.RepositoryPCSPQuestion;
 import repository.RepositoryPCSProcess;
@@ -47,7 +48,8 @@ public class ControllerConfig {
     private RepositoryPCSubCriteria repositoryPCSubCriteria;
     private RepositoryPCSProcess repositoryPCSProcess;
     private RepositoryPCSPQuestion repositoryPCSPQuestion;
-
+    private static final org.apache.logging.log4j.Logger logger = LogManager.getLogger(ControllerConfig.class);
+    
     public ControllerConfig() {
         repositoryPeriod = new RepositoryPeriod();
         repositoryCriteria = new RepositoryCriteria();

@@ -25,6 +25,11 @@ public class LoginForm extends javax.swing.JFrame {
     public LoginForm() {
         initComponents();
         controllerLogin = new ControllerLogin();
+        try {
+            controllerLogin.checkAdmin();
+        } catch (SQLException ex) {
+            Logger.getLogger(LoginForm.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**

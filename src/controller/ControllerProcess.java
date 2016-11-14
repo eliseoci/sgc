@@ -9,6 +9,7 @@ import java.sql.SQLException;
 import java.util.List;
 import javax.swing.JOptionPane;
 import model.Process;
+import org.apache.logging.log4j.LogManager;
 import repository.RepositoryProcess;
 import view.process.FormProcess;
 import view.process.ListProcess;
@@ -20,6 +21,7 @@ import view.process.ListProcess;
 public class ControllerProcess {
 
     private RepositoryProcess repositoryProcess;
+    private static final org.apache.logging.log4j.Logger logger = LogManager.getLogger(ControllerProcess.class);
 
     public ControllerProcess() {
         repositoryProcess = new RepositoryProcess();
@@ -45,6 +47,7 @@ public class ControllerProcess {
                 Process groups = new Process();
                 groups.setDescription(view.getTxtProcess().getText());
                 repositoryProcess.save(groups);
+                logger.trace("Proceso creado");
                 view.dispose();
             } catch (SQLException ex) {
                 JOptionPane.showMessageDialog(view, "No se guardo el nuevo Proceso.", "Error", JOptionPane.ERROR_MESSAGE);
@@ -62,6 +65,7 @@ public class ControllerProcess {
                 groups.setId(view.getId());
                 groups.setDescription(view.getTxtProcess().getText());
                 repositoryProcess.update(groups);
+                logger.trace("Proceso #" + view.getId() + " actualizado");
                 view.dispose();
             } catch (SQLException ex) {
                 JOptionPane.showMessageDialog(view, "No se actualizó el Proceso.", "Error", JOptionPane.ERROR_MESSAGE);
@@ -85,6 +89,7 @@ public class ControllerProcess {
 
         try {
             repositoryProcess.delete(Integer.valueOf(id));
+            logger.trace("Proceso #" + id + " eliminado");
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(view, "Error al eliminar el Proceso.", "Error", JOptionPane.ERROR_MESSAGE);
         }
