@@ -31,6 +31,7 @@ public class ControllerLogin {
         User user = repositoryUser.getUser("admin");
         if(user == null){
             repositoryUser.createUser(new User("admin","admin"));
+            logger.trace("Admin creado.");
         }
     }
     

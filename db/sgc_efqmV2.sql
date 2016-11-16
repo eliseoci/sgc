@@ -1,40 +1,429 @@
--- phpMyAdmin SQL Dump
--- version 4.1.14
--- http://www.phpmyadmin.net
---
--- Servidor: 127.0.0.1
--- Tiempo de generación: 09-02-2016 a las 21:21:22
--- Versión del servidor: 5.6.17
--- Versión de PHP: 5.5.12
+-- MySQL Workbench Forward Engineering
 
-SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET time_zone = "+00:00";
+SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
+SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
+
+-- -----------------------------------------------------
+-- Schema mydb
+-- -----------------------------------------------------
+-- -----------------------------------------------------
+-- Schema dbc109a5c2d0164d93bc7ca6be01867c08
+-- -----------------------------------------------------
+
+-- -----------------------------------------------------
+-- Table `dbc109a5c2d0164d93bc7ca6be01867c08`.`answer`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `dbc109a5c2d0164d93bc7ca6be01867c08`.`answer` (
+  `idanswer` INT(11) NOT NULL AUTO_INCREMENT,
+  `description` VARCHAR(100) NOT NULL,
+  PRIMARY KEY (`idanswer`))
+ENGINE = InnoDB
+AUTO_INCREMENT = 6
+DEFAULT CHARACTER SET = utf8;
 
 
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8 */;
+-- -----------------------------------------------------
+-- Table `dbc109a5c2d0164d93bc7ca6be01867c08`.`criteria`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `dbc109a5c2d0164d93bc7ca6be01867c08`.`criteria` (
+  `idcriteria` INT(11) NOT NULL AUTO_INCREMENT,
+  `description` VARCHAR(150) NOT NULL,
+  `type` INT(11) NOT NULL,
+  PRIMARY KEY (`idcriteria`),
+  INDEX `fk_criteria_type1_idx` (`type` ASC))
+ENGINE = InnoDB
+AUTO_INCREMENT = 10
+DEFAULT CHARACTER SET = utf8;
 
---
--- Base de datos: `sgc_efqm`
---
 
--- --------------------------------------------------------
+-- -----------------------------------------------------
+-- Table `dbc109a5c2d0164d93bc7ca6be01867c08`.`period`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `dbc109a5c2d0164d93bc7ca6be01867c08`.`period` (
+  `idperiod` INT(11) NOT NULL AUTO_INCREMENT,
+  `description` VARCHAR(125) NOT NULL,
+  `period_processed` INT(11) NOT NULL,
+  PRIMARY KEY (`idperiod`))
+ENGINE = InnoDB
+AUTO_INCREMENT = 7
+DEFAULT CHARACTER SET = utf8;
 
---
--- Estructura de tabla para la tabla `answer`
---
 
-CREATE TABLE IF NOT EXISTS `answer` (
-  `idanswer` int(11) NOT NULL AUTO_INCREMENT,
-  `description` varchar(100) NOT NULL,
-  PRIMARY KEY (`idanswer`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=6 ;
+-- -----------------------------------------------------
+-- Table `dbc109a5c2d0164d93bc7ca6be01867c08`.`period_criteria`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `dbc109a5c2d0164d93bc7ca6be01867c08`.`period_criteria` (
+  `idpc` INT(11) NOT NULL AUTO_INCREMENT,
+  `criteria` INT(11) NOT NULL,
+  `period` INT(11) NOT NULL,
+  `point_efqm` DECIMAL(5,2) NOT NULL,
+  PRIMARY KEY (`idpc`, `period`),
+  INDEX `fk_period_criteria_criteria1_idx` (`criteria` ASC),
+  INDEX `fk_period_criteria_period1_idx` (`period` ASC),
+  CONSTRAINT `fk_period_criteria_criteria1`
+    FOREIGN KEY (`criteria`)
+    REFERENCES `dbc109a5c2d0164d93bc7ca6be01867c08`.`criteria` (`idcriteria`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_period_criteria_period1`
+    FOREIGN KEY (`period`)
+    REFERENCES `dbc109a5c2d0164d93bc7ca6be01867c08`.`period` (`idperiod`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
+AUTO_INCREMENT = 34
+DEFAULT CHARACTER SET = utf8;
 
---
--- Volcado de datos para la tabla `answer`
---
+
+-- -----------------------------------------------------
+-- Table `dbc109a5c2d0164d93bc7ca6be01867c08`.`average_criteria`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `dbc109a5c2d0164d93bc7ca6be01867c08`.`average_criteria` (
+  `idaverage_criteria` INT(11) NOT NULL AUTO_INCREMENT,
+  `period_criteria` INT(11) NOT NULL,
+  `period` INT(11) NOT NULL,
+  `value` DECIMAL(5,2) NOT NULL,
+  PRIMARY KEY (`idaverage_criteria`),
+  INDEX `fk_average_criteria_poll_criteria1_idx` (`period_criteria` ASC, `period` ASC),
+  CONSTRAINT `fk_average_criteria_poll_criteria1`
+    FOREIGN KEY (`period_criteria` , `period`)
+    REFERENCES `dbc109a5c2d0164d93bc7ca6be01867c08`.`period_criteria` (`idpc` , `period`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
+AUTO_INCREMENT = 63
+DEFAULT CHARACTER SET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `dbc109a5c2d0164d93bc7ca6be01867c08`.`subcriteria`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `dbc109a5c2d0164d93bc7ca6be01867c08`.`subcriteria` (
+  `idsubcriteria` INT(11) NOT NULL AUTO_INCREMENT,
+  `description` VARCHAR(150) NOT NULL,
+  PRIMARY KEY (`idsubcriteria`))
+ENGINE = InnoDB
+AUTO_INCREMENT = 33
+DEFAULT CHARACTER SET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `dbc109a5c2d0164d93bc7ca6be01867c08`.`pc_subcriteria`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `dbc109a5c2d0164d93bc7ca6be01867c08`.`pc_subcriteria` (
+  `idpcs` INT(11) NOT NULL AUTO_INCREMENT,
+  `subcriteria` INT(11) NOT NULL,
+  `period_criteria` INT(11) NOT NULL,
+  `period` INT(11) NOT NULL,
+  `adjustment` DECIMAL(5,2) NULL DEFAULT NULL,
+  `percentage` DECIMAL(5,2) NULL DEFAULT NULL,
+  PRIMARY KEY (`idpcs`, `period_criteria`, `period`),
+  INDEX `fk_pc_subcriteria_subcriteria1_idx` (`subcriteria` ASC),
+  INDEX `fk_pc_subcriteria_period_criteria1_idx` (`period_criteria` ASC, `period` ASC),
+  CONSTRAINT `fk_pc_subcriteria_period_criteria1`
+    FOREIGN KEY (`period_criteria` , `period`)
+    REFERENCES `dbc109a5c2d0164d93bc7ca6be01867c08`.`period_criteria` (`idpc` , `period`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_pc_subcriteria_subcriteria1`
+    FOREIGN KEY (`subcriteria`)
+    REFERENCES `dbc109a5c2d0164d93bc7ca6be01867c08`.`subcriteria` (`idsubcriteria`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
+AUTO_INCREMENT = 80
+DEFAULT CHARACTER SET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `dbc109a5c2d0164d93bc7ca6be01867c08`.`process`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `dbc109a5c2d0164d93bc7ca6be01867c08`.`process` (
+  `idprocess` INT(11) NOT NULL AUTO_INCREMENT,
+  `description` VARCHAR(150) NOT NULL,
+  PRIMARY KEY (`idprocess`))
+ENGINE = InnoDB
+AUTO_INCREMENT = 8
+DEFAULT CHARACTER SET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `dbc109a5c2d0164d93bc7ca6be01867c08`.`pcs_process`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `dbc109a5c2d0164d93bc7ca6be01867c08`.`pcs_process` (
+  `idpcsp` INT(11) NOT NULL AUTO_INCREMENT,
+  `process` INT(11) NOT NULL,
+  `pc_subcriteria` INT(11) NOT NULL,
+  `period_criteria` INT(11) NOT NULL,
+  `period` INT(11) NOT NULL,
+  PRIMARY KEY (`idpcsp`, `pc_subcriteria`, `period_criteria`, `period`),
+  INDEX `fk_pcs_process_process1_idx` (`process` ASC),
+  INDEX `fk_pcs_process_pc_subcriteria1_idx` (`pc_subcriteria` ASC, `period_criteria` ASC, `period` ASC),
+  CONSTRAINT `fk_pcs_process_pc_subcriteria1`
+    FOREIGN KEY (`pc_subcriteria` , `period_criteria` , `period`)
+    REFERENCES `dbc109a5c2d0164d93bc7ca6be01867c08`.`pc_subcriteria` (`idpcs` , `period_criteria` , `period`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_pcs_process_process1`
+    FOREIGN KEY (`process`)
+    REFERENCES `dbc109a5c2d0164d93bc7ca6be01867c08`.`process` (`idprocess`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
+AUTO_INCREMENT = 112
+DEFAULT CHARACTER SET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `dbc109a5c2d0164d93bc7ca6be01867c08`.`average_process`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `dbc109a5c2d0164d93bc7ca6be01867c08`.`average_process` (
+  `idag` INT(11) NOT NULL AUTO_INCREMENT,
+  `pcs_process` INT(11) NOT NULL,
+  `pc_subcriteria` INT(11) NOT NULL,
+  `period_criteria` INT(11) NOT NULL,
+  `period` INT(11) NOT NULL,
+  `min` DECIMAL(5,2) NOT NULL,
+  `max` DECIMAL(5,2) NOT NULL,
+  `consensus` DECIMAL(5,2) NOT NULL,
+  PRIMARY KEY (`idag`),
+  INDEX `fk_average_process_pcs_process1_idx` (`pcs_process` ASC, `pc_subcriteria` ASC, `period_criteria` ASC, `period` ASC),
+  CONSTRAINT `fk_average_process_pcs_process1`
+    FOREIGN KEY (`pcs_process` , `pc_subcriteria` , `period_criteria` , `period`)
+    REFERENCES `dbc109a5c2d0164d93bc7ca6be01867c08`.`pcs_process` (`idpcsp` , `pc_subcriteria` , `period_criteria` , `period`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
+AUTO_INCREMENT = 152
+DEFAULT CHARACTER SET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `dbc109a5c2d0164d93bc7ca6be01867c08`.`average_responses`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `dbc109a5c2d0164d93bc7ca6be01867c08`.`average_responses` (
+  `idar` INT(11) NOT NULL AUTO_INCREMENT,
+  `criteria` INT(11) NOT NULL,
+  `subcriteria` INT(11) NOT NULL,
+  `process` INT(11) NOT NULL,
+  `value` DECIMAL(5,2) NOT NULL,
+  `period` INT(11) NOT NULL,
+  PRIMARY KEY (`idar`),
+  INDEX `fk_average_responses_poll1_idx` (`period` ASC),
+  CONSTRAINT `fk_average_responses_poll1`
+    FOREIGN KEY (`period`)
+    REFERENCES `dbc109a5c2d0164d93bc7ca6be01867c08`.`period` (`idperiod`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
+AUTO_INCREMENT = 1051
+DEFAULT CHARACTER SET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `dbc109a5c2d0164d93bc7ca6be01867c08`.`average_subcriteria`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `dbc109a5c2d0164d93bc7ca6be01867c08`.`average_subcriteria` (
+  `idas` INT(11) NOT NULL AUTO_INCREMENT,
+  `pc_subcriteria` INT(11) NOT NULL,
+  `period_criteria` INT(11) NOT NULL,
+  `period` INT(11) NOT NULL,
+  `partial` DECIMAL(5,2) NULL DEFAULT NULL,
+  `total` DECIMAL(5,2) NULL DEFAULT NULL,
+  PRIMARY KEY (`idas`),
+  INDEX `fk_average_subcriteria_pc_subcriteria1_idx` (`pc_subcriteria` ASC, `period_criteria` ASC, `period` ASC),
+  CONSTRAINT `fk_average_subcriteria_pc_subcriteria1`
+    FOREIGN KEY (`pc_subcriteria` , `period_criteria` , `period`)
+    REFERENCES `dbc109a5c2d0164d93bc7ca6be01867c08`.`pc_subcriteria` (`idpcs` , `period_criteria` , `period`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
+ENGINE = InnoDB
+AUTO_INCREMENT = 119
+DEFAULT CHARACTER SET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `dbc109a5c2d0164d93bc7ca6be01867c08`.`priority`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `dbc109a5c2d0164d93bc7ca6be01867c08`.`priority` (
+  `idpriority` INT(11) NOT NULL AUTO_INCREMENT,
+  `description` VARCHAR(200) NOT NULL,
+  PRIMARY KEY (`idpriority`),
+  UNIQUE INDEX `idpriority_UNIQUE` (`idpriority` ASC))
+ENGINE = InnoDB
+AUTO_INCREMENT = 4
+DEFAULT CHARACTER SET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `dbc109a5c2d0164d93bc7ca6be01867c08`.`status`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `dbc109a5c2d0164d93bc7ca6be01867c08`.`status` (
+  `idstatus` INT(11) NOT NULL AUTO_INCREMENT,
+  `description` VARCHAR(200) NOT NULL,
+  PRIMARY KEY (`idstatus`),
+  UNIQUE INDEX `idstatus_UNIQUE` (`idstatus` ASC))
+ENGINE = InnoDB
+AUTO_INCREMENT = 4
+DEFAULT CHARACTER SET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `dbc109a5c2d0164d93bc7ca6be01867c08`.`improvements`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `dbc109a5c2d0164d93bc7ca6be01867c08`.`improvements` (
+  `idimprovements` INT(11) NOT NULL AUTO_INCREMENT,
+  `title` VARCHAR(100) NOT NULL,
+  `description` LONGTEXT NOT NULL,
+  `period` INT(11) NOT NULL,
+  `priority` INT(11) NOT NULL,
+  `status` INT(11) NOT NULL,
+  PRIMARY KEY (`idimprovements`),
+  UNIQUE INDEX `idimprovements_UNIQUE` (`idimprovements` ASC),
+  INDEX `fk_improvements_period1_idx` (`period` ASC),
+  INDEX `fk_improvements_priority1_idx` (`priority` ASC),
+  INDEX `fk_improvements_status1_idx` (`status` ASC),
+  CONSTRAINT `fk_improvements_period1`
+    FOREIGN KEY (`period`)
+    REFERENCES `dbc109a5c2d0164d93bc7ca6be01867c08`.`period` (`idperiod`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_improvements_priority1`
+    FOREIGN KEY (`priority`)
+    REFERENCES `dbc109a5c2d0164d93bc7ca6be01867c08`.`priority` (`idpriority`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_improvements_status1`
+    FOREIGN KEY (`status`)
+    REFERENCES `dbc109a5c2d0164d93bc7ca6be01867c08`.`status` (`idstatus`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
+AUTO_INCREMENT = 2
+DEFAULT CHARACTER SET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `dbc109a5c2d0164d93bc7ca6be01867c08`.`logs`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `dbc109a5c2d0164d93bc7ca6be01867c08`.`logs` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `dated` DATE NOT NULL,
+  `logger` VARCHAR(50) NOT NULL,
+  `level` VARCHAR(45) NOT NULL,
+  `message` VARCHAR(1000) NOT NULL,
+  `THROWABLE` VARCHAR(255) NOT NULL,
+  `user_id` INT(11) NULL DEFAULT NULL,
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB
+AUTO_INCREMENT = 6
+DEFAULT CHARACTER SET = latin1;
+
+
+-- -----------------------------------------------------
+-- Table `dbc109a5c2d0164d93bc7ca6be01867c08`.`questions`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `dbc109a5c2d0164d93bc7ca6be01867c08`.`questions` (
+  `idquestions` INT(11) NOT NULL AUTO_INCREMENT,
+  `question` TEXT NOT NULL,
+  PRIMARY KEY (`idquestions`))
+ENGINE = InnoDB
+AUTO_INCREMENT = 244
+DEFAULT CHARACTER SET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `dbc109a5c2d0164d93bc7ca6be01867c08`.`pcsp_questions`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `dbc109a5c2d0164d93bc7ca6be01867c08`.`pcsp_questions` (
+  `idpcspq` INT(11) NOT NULL AUTO_INCREMENT,
+  `questions_idquestions` INT(11) NOT NULL,
+  `pcs_process` INT(11) NOT NULL,
+  `pc_subcriteria` INT(11) NOT NULL,
+  `period_criteria` INT(11) NOT NULL,
+  `period` INT(11) NOT NULL,
+  PRIMARY KEY (`idpcspq`, `pcs_process`, `pc_subcriteria`, `period_criteria`, `period`),
+  INDEX `fk_pcsp_questions_questions1_idx` (`questions_idquestions` ASC),
+  INDEX `fk_pcsp_questions_pcs_process1_idx` (`pcs_process` ASC, `pc_subcriteria` ASC, `period_criteria` ASC, `period` ASC),
+  CONSTRAINT `fk_pcsp_questions_pcs_process1`
+    FOREIGN KEY (`pcs_process` , `pc_subcriteria` , `period_criteria` , `period`)
+    REFERENCES `dbc109a5c2d0164d93bc7ca6be01867c08`.`pcs_process` (`idpcsp` , `pc_subcriteria` , `period_criteria` , `period`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_pcsp_questions_questions1`
+    FOREIGN KEY (`questions_idquestions`)
+    REFERENCES `dbc109a5c2d0164d93bc7ca6be01867c08`.`questions` (`idquestions`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
+AUTO_INCREMENT = 237
+DEFAULT CHARACTER SET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `dbc109a5c2d0164d93bc7ca6be01867c08`.`responses_people`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `dbc109a5c2d0164d93bc7ca6be01867c08`.`responses_people` (
+  `idresppeo` INT(11) NOT NULL AUTO_INCREMENT,
+  `hash` VARCHAR(45) NOT NULL,
+  `pcsp_questions` INT(11) NOT NULL,
+  `pcs_process` INT(11) NOT NULL,
+  `pc_subcriteria` INT(11) NOT NULL,
+  `period_criteria` INT(11) NOT NULL,
+  `period` INT(11) NOT NULL,
+  `type_answer` INT(11) NOT NULL,
+  PRIMARY KEY (`idresppeo`),
+  INDEX `fk_responses_people_pcsp_questions1_idx` (`pcsp_questions` ASC, `pcs_process` ASC, `pc_subcriteria` ASC, `period_criteria` ASC, `period` ASC),
+  INDEX `fk_responses_people_type_answer1_idx` (`type_answer` ASC))
+ENGINE = InnoDB
+AUTO_INCREMENT = 1894
+DEFAULT CHARACTER SET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `dbc109a5c2d0164d93bc7ca6be01867c08`.`type`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `dbc109a5c2d0164d93bc7ca6be01867c08`.`type` (
+  `idtype` INT(11) NOT NULL AUTO_INCREMENT,
+  `description` VARCHAR(150) NULL DEFAULT NULL,
+  PRIMARY KEY (`idtype`))
+ENGINE = InnoDB
+AUTO_INCREMENT = 4
+DEFAULT CHARACTER SET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `dbc109a5c2d0164d93bc7ca6be01867c08`.`type_answer`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `dbc109a5c2d0164d93bc7ca6be01867c08`.`type_answer` (
+  `idta` INT(11) NOT NULL AUTO_INCREMENT,
+  `type` INT(11) NOT NULL,
+  `answer` INT(11) NOT NULL,
+  `value` DECIMAL(5,2) NOT NULL,
+  PRIMARY KEY (`idta`),
+  INDEX `fk_type_answer_type1_idx` (`type` ASC),
+  INDEX `fk_type_answer_answer1_idx` (`answer` ASC))
+ENGINE = InnoDB
+AUTO_INCREMENT = 16
+DEFAULT CHARACTER SET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `dbc109a5c2d0164d93bc7ca6be01867c08`.`users`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `dbc109a5c2d0164d93bc7ca6be01867c08`.`users` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `username` VARCHAR(45) NULL DEFAULT NULL,
+  `pass` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB
+AUTO_INCREMENT = 2
+DEFAULT CHARACTER SET = latin1;
+
+-- -----------------------------------------------------
+-- Volcado de datos
+-- -----------------------------------------------------
 
 INSERT INTO `answer` (`idanswer`, `description`) VALUES
 (1, 'NADA'),
@@ -43,24 +432,620 @@ INSERT INTO `answer` (`idanswer`, `description`) VALUES
 (4, 'MUCHO'),
 (5, 'TOTALMENTE');
 
--- --------------------------------------------------------
+INSERT INTO `type` (`idtype`, `description`) VALUES
+(1, 'Group 1'),
+(2, 'Group 2'),
+(3, 'Group 3');
 
---
--- Estructura de tabla para la tabla `average_criteria`
---
+INSERT INTO `status` (`idstatus`, `description`) VALUES
+(1, 'Sin tratar'),
+(2, 'En progreso'),
+(3, 'Finalizado');
 
-CREATE TABLE IF NOT EXISTS `average_criteria` (
-  `idaverage_criteria` int(11) NOT NULL AUTO_INCREMENT,
-  `period_criteria` int(11) NOT NULL,
-  `period` int(11) NOT NULL,
-  `value` decimal(5,2) NOT NULL,
-  PRIMARY KEY (`idaverage_criteria`),
-  KEY `fk_average_criteria_poll_criteria1_idx` (`period_criteria`,`period`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=65 ;
+INSERT INTO `type_answer` (`idta`, `type`, `answer`, `value`) VALUES
+(1, 1, 1, '0.00'),
+(2, 1, 2, '25.00'),
+(3, 1, 3, '50.00'),
+(4, 1, 4, '75.00'),
+(5, 1, 5, '100.00'),
+(6, 2, 1, '0.00'),
+(7, 2, 2, '37.00'),
+(8, 2, 3, '75.00'),
+(9, 2, 4, '112.00'),
+(10, 2, 5, '150.00'),
+(11, 3, 1, '0.00'),
+(12, 3, 2, '22.00'),
+(13, 3, 3, '45.00'),
+(14, 3, 4, '67.00'),
+(15, 3, 5, '90.00');
 
---
--- Volcado de datos para la tabla `average_criteria`
---
+INSERT INTO `subcriteria` (`idsubcriteria`, `description`) VALUES
+(1, '1a'),
+(2, '1b'),
+(3, '1c'),
+(4, '1d'),
+(5, '1e'),
+(6, '2a'),
+(7, '2b'),
+(8, '2c'),
+(9, '2d'),
+(10, '3a'),
+(11, '3b'),
+(12, '3c'),
+(13, '3d'),
+(14, '3e'),
+(15, '4a'),
+(16, '4b'),
+(17, '4c'),
+(18, '4d'),
+(19, '4e'),
+(20, '5a'),
+(21, '5b'),
+(22, '5c'),
+(23, '5d'),
+(24, '5e'),
+(25, '6a'),
+(26, '6b'),
+(27, '7a'),
+(28, '7b'),
+(29, '8a'),
+(30, '8b'),
+(31, '9a'),
+(32, '9b');
+
+INSERT INTO `period` (`idperiod`, `description`, `period_processed`) VALUES
+(1, '2012', 1),
+(3, '2015', 1);
+
+INSERT INTO `criteria` (`idcriteria`, `description`, `type`) VALUES
+(1, 'Liderazgo', 1),
+(2, 'Estrategia', 1),
+(3, 'Personas', 1),
+(4, 'Alianzas y Recursos', 1),
+(5, 'Procesos, Productos y Servicios', 1),
+(6, 'Resultados en los Clientes', 2),
+(7, 'Resultados en las Personas', 3),
+(8, 'Resultados en la Sociedad', 1),
+(9, 'Resultados Clave', 2);
+
+INSERT INTO `period_criteria` (`idpc`, `criteria`, `period`, `point_efqm`) VALUES
+(10, 1, 1, '100.00'),
+(11, 2, 1, '100.00'),
+(12, 3, 1, '100.00'),
+(13, 4, 1, '100.00'),
+(14, 5, 1, '100.00'),
+(15, 6, 1, '150.00'),
+(16, 7, 1, '100.00'),
+(17, 8, 1, '100.00'),
+(18, 9, 1, '150.00'),
+(19, 1, 3, '100.00'),
+(20, 2, 3, '100.00'),
+(21, 3, 3, '100.00'),
+(22, 4, 3, '100.00'),
+(23, 5, 3, '100.00'),
+(24, 6, 3, '150.00'),
+(25, 7, 3, '100.00'),
+(26, 8, 3, '100.00'),
+(27, 9, 3, '150.00');
+
+INSERT INTO `questions` (`idquestions`, `question`) VALUES
+(12, '¿Han sido definidos por parte del Equipo Directivo la Misión, la Visión, los Principios Éticos y Valores que conforman la "Cultura" de la Universidad, y han sido convenientemente divulgados a todos los Grupos de Interés (profesores, alumnos, Personal de Administración y Servicios (PAS), Consejo Social, etc.)?'),
+(13, '¿Incluyen dichos valores conceptos tales como calidad y aprendizaje? '),
+(14, 'El comportamiento del Equipo Directivo ¿es coherente con dichos valores?'),
+(15, '¿Impulsa la Gerencia el desarrollo e implantación de un Sistema de Gestión por Procesos que permita traducir la Estrategia/Presupuesto a objetivos cuantificables que, medidos de forma periódica, sirvan para mejorar los resultados globales?'),
+(16, '¿Se relaciona el Equipo Directivo con los profesores, alumnos, socios y representantes de la sociedad para conocer sus necesidades y expectativas?'),
+(17, '¿Se implican y apoyan actividades de mejora, protección medioambiental o de contribución a la sociedad?'),
+(18, '¿Mantiene el Equipo Directivo una comunicación fluida y bidireccional con sus empleados?'),
+(19, '¿Aprovechan dicha comunicación para transmitir los Valores y las Estrategias de la Universidad? '),
+(20, '¿Escuchan las aportaciones y/o quejas de sus empleados?'),
+(21, '¿Apoya el Equipo Directivo a sus empleados y les ayudan si es necesario para conseguir sus objetivos? '),
+(22, '¿Les animan y facilitan la participación en equipos/actividades de mejora? '),
+(23, '¿Reconocen adecuadamente a individuos o equipos por su contribución a dichas actividades?'),
+(24, '¿Define e impulsa el Equipo Directivo los cambios necesarios para adecuar la Universidad? '),
+(25, '¿Garantizan la inversión, los recursos y el apoyo necesarios para desarrollar dichos cambios? '),
+(26, '¿Una vez producidos los cambios, se mide la eficacia de los mismos y se comunican a los Grupos de Interés?'),
+(27, 'En la definición del Plan Operativo/Presupuesto Anual de la Unidad Organizativa, ¿se recogen y consideran las Necesidades y Expectativas de los diferentes Grupos de Interés (empleados de la propia Unidad, estudiantes, potenciales estudiantes, PDI, PAS, centros, departamentos, órganos de gobierno, Admones. Públicas e instituciones conveniadas), así como datos sobre el comportamiento del sistema universitario y unidades similares?'),
+(28, 'En la definición del Plan Operativo/Presupuesto Anual de la Unidad Organizativa, ¿se recogen y consideran los resultados de las mediciones anteriores, tanto propios como de unidades similares, y se analizan los impactos de la legislación aplicable, la innovación tecnológica, y los indicadores socioeconómicos y demográficos a corto y largo plazo?'),
+(29, 'En la definición del Plan Operativo/Presupuesto Anual de la Unidad Organizativa, ¿se tienen en cuenta: Coherencia con los Principios Éticos y Valores que conforman su "Cultura"?'),
+(30, 'En la definición del Plan Operativo/Presupuesto Anual de la Unidad Organizativa, ¿se tienen en cuenta: Atención equilibrada de necesidades y expectativas de los Grupos de Interés.?'),
+(31, 'En la definición del Plan Operativo/Presupuesto Anual de la Unidad Organizativa, ¿se tienen en cuenta: Análisis de Riesgos y Plazos e identificación de los Factores Críticos de Éxito?'),
+(32, '¿Se identifican los Procesos Clave de la Unidad Organizativa y se despliega el Plan Operativo a través de ellos? '),
+(33, '¿Se descomponen los Objetivos y Metas de la Unidad Organizativa a través de los distintos niveles, llegando hasta la definición y seguimiento de los objetivos individuales o de equipo?'),
+(34, '¿Se evalúa el nivel de conocimiento y sensibilización de los Grupos de Interés sobre los aspectos fundamentales de la Estrategia, Plan Operativo y Presupuesto, según sea apropiado?'),
+(35, '¿Existe un Plan específico de Personal de Administración y Servicios, respetuoso con la legislación vigente y la igualdad de oportunidades, alineado con la Estrategia y el Plan Operativo de la Universidad, y se revisa conjuntamente con ellos? '),
+(36, '¿Se tienen en cuenta las opiniones del Personal de Administración y Servicios en la definición de dicho Plan?'),
+(37, '¿Se preocupa el Equipo Directivo del desarrollo personal y profesional del Personal de Administración y Servicios, procurando la adecuación de sus conocimientos y experiencia a las necesidades derivadas de su responsabilidad? '),
+(38, '¿Se desarrollan e implantan planes de formación que faciliten dicha adecuación? '),
+(39, '¿Se asigna al Personal de Administración y Servicios objetivos individuales y de equipo, y se evalúa su rendimiento?'),
+(40, '¿Estimula el Equipo Directivo la implicación del PAS hacia la consecución de sus objetivos, mediante la motivación y el reconocimiento? '),
+(41, '¿Promueve y facilita el Equipo Directivo la participación del PAS en acciones de mejora?'),
+(42, '¿Impulsa y motiva al PAS hacia la innovación y la creatividad, siendo receptiva a sus aportaciones y sugerencias de mejora?'),
+(43, '¿Se preocupa el Equipo Directivo de establecer una buena comunicación con/entre sus empleados?'),
+(44, '¿Se han desarrollado cauces de comunicación verticales y horizontales y se utilizan eficientemente? '),
+(45, '¿Se aprovechan dichos canales de comunicación para difundir el conocimiento y las buenas prácticas?'),
+(46, '¿Se asegura el Equipo directivo del alineamiento de sus políticas de remuneración, movilidad, etc., con el Plan Operativo y Presupuesto? '),
+(47, '¿Existe una política de reconocimiento hacia el PAS y fomento de la concienciación en temas medioambientales y de seguridad e higiene? '),
+(48, '¿Se proporciona al PAS unas instalaciones y servicios de alta calidad? '),
+(49, '¿Existe sensibilidad ante necesidades personales/clientes?'),
+(50, '¿Identifica la Unidad Organizativa aquellas Organizaciones clave con las que se relaciona (Universidades, administraciones públicas, proveedores, etc.)?'),
+(51, '¿Desarrolla con ellas acuerdos de colaboración, fomentando la transferencia de conocimientos y el aprovechamiento de sinergias?'),
+(52, '¿Se ha definido e implantado una estrategia económico-financiera, alineada con la Estrategia/Plan Operativo de la Unidad Organizativa y traducida en un Presupuesto Anual? '),
+(53, '¿Contempla dicha estrategia tanto las inversiones previstas, como los recursos necesarios para la financiación de las actividades de la Unidad Organizativa?'),
+(54, '¿Contempla una adecuada gestión del riesgo financiero, gestión de cobros (cuando proceda), etc.?'),
+(55, '¿Se asegura la Unidad Organizativa del adecuado funcionamiento, conservación y seguridad de sus edificios e instalaciones? '),
+(56, '¿Se optimizan recursos, inventarios y se reducen consumos de suministros y energías (principalmente, los no renovables)? '),
+(57, '¿Se cuidan adecuadamente los aspectos medioambientales y de reciclado de residuos?'),
+(58, '¿Identifica la Unidad Organizativa las tecnologías e instalaciones más adecuadas para cubrir sus necesidades y las de sus clientes? '),
+(59, '¿Gestiona adecuadamente las tecnologías existentes y se preocupa de su actualización y renovación?'),
+(60, '¿Recoge y gestiona adecuadamente la Unidad Organizativa toda la información pertinente para el cumplimiento de sus fines? '),
+(61, '¿Facilita a sus Grupos de Interés el acceso a las informaciones que son de su interés?'),
+(62, '¿Protege adecuadamente la información sensible, tanto para la gestión como para las personas?'),
+(63, '¿La Facultad dispone y aplica una metodología de procesos orientada a la identificación, diseño y documentación de sus Procesos Clave, que son aquéllos considerados imprescindibles para desplegar y desarrollar la Estrategia y Plan Operativo? '),
+(64, '¿Dicha metodología de procesos se corresponde con alguna estandarización del tipo ISO 9000 propia de la Universidad o similar?'),
+(65, '¿Disponen los Procesos, y en especial los denominados Clave, de unos sistemas de medición o indicadores, que permitan establecer sus objetivos de rendimiento y evaluar los resultados obtenidos? '),
+(66, '¿Se han identificado aquellas áreas de los procesos que son comunes con otras unidades y a agentes externos a éste (proveedores, administración, etc.)?'),
+(67, '¿Se revisa regularmente la eficiencia de los Procesos y se modifican apropiadamente en función de dichas revisiones, así como en función de las informaciones procedentes de sugerencias de mejora, actividades de aprendizaje, propuestas de innovación, etc.? '),
+(68, 'La implantación de los cambios en los Procesos, ¿se realiza mediante un análisis previo (piloto) y una adecuada comunicación/formación a todos los implicados?'),
+(69, '¿Se recogen informaciones procedentes de estudios de mercado y competencia, necesidades y expectativas de clientes, sugerencias innovadoras y creativas..., ?'),
+(70, '¿se tiene en cuenta esta informacion a la hora de definir los nuevos Productos, Servicios y actividades de la Unidad organizativa?'),
+(71, '¿Se investigan las necesidades y expectativas, así como el grado de satisfacción de los clientes con los Productos y Servicios, y se utiliza dicha información para la modificación y mejora de los mismos?'),
+(72, '¿Se asegura la Unidad organizativa de que las características y prestaciones de los Productos y Servicios que proporciona a sus clientes responden a las especificaciones de su diseño? '),
+(73, '¿Comunica veraz y adecuadamente la Unidad organizativa las condiciones de prestación de sus Productos y Servicios a sus potenciales clientes? '),
+(74, '¿Establece niveles de compromiso y es consecuente con los mismos?'),
+(75, '¿Desarrolla la Unidad organizativa actividades encaminadas a identificar necesidades y expectativas de sus clientes? '),
+(76, '¿Dispone la Unidad organizativa de cauces de comunicación para la recepción de quejas y reclamaciones de sus clientes? '),
+(77, '¿Tramita las mismas de forma sistemática y utiliza dicha información para la mejora permanente de sus servicios?'),
+(78, '¿Identifica la Universidad cuáles son los aspectos más significativos y que más aprecian sus clientes? '),
+(79, '¿El método que se utiliza para identificar dichos aspectos es fiable, se revisa de forma periódica y permite segmentar los resultados en función de los diferentes grupos de clientes?'),
+(80, '¿Obtiene periódicamente los Servicios de la Universidad información directa del grado de satisfacción de los diferentes grupos de clientes respecto a dichos aspectos más significativos, así como de los servicios recibidos, y el nivel de satisfacción global?'),
+(81, 'Sobre los indicadores del grado de satisfacción de clientes, ¿se marcan objetivos y se miden los resultados obtenidos? '),
+(82, '¿La tendencia de dichos indicadores es positiva? '),
+(83, 'Si en alguno no lo fuera, ¿se han averiguado las causas y establecido las acciones de mejora adecuadas?'),
+(84, '¿Se comparan los índices de satisfacción de clientes con los de los Servicios en otras Universidades? '),
+(85, 'Respecto a dichos indicadores, ¿en qué situación competitiva situamos a la Universidad?'),
+(86, 'Teniendo en cuenta cuáles son los aspectos más valorados por los clientes, ¿ha identificado la Universidad con qué procesos están relacionados y con qué indicadores de dichos procesos puede existir una correspondencia?'),
+(87, 'Sobre los indicadores de dichos procesos, que inciden directamente en la satisfacción de los clientes, ¿se marcan objetivos y se miden los resultados obtenidos? '),
+(88, '¿La tendencia de dichos indicadores es positiva? '),
+(89, 'Si en alguno no lo fuera, ¿se han averiguado las causas y establecido las acciones de mejora adecuadas?'),
+(90, '¿Se comparan los resultados de dichos indicadores con los de otras Universidades o el propio sector? '),
+(91, 'Respecto a dichos indicadores, ¿en qué situación competitiva situamos a los Servicios de la Universidad?'),
+(92, '¿Obtiene periódicamente la Facultad información directa del grado de satisfacción de los diferentes grupos de empleados respecto a aquellos aspectos que les son más significativos, así como del nivel de satisfacción global?'),
+(93, 'Sobre los indicadores del grado de satisfacción de los empleados, ¿se marcan objetivos y se miden los resultados obtenidos? '),
+(94, '¿La tendencia de dichos indicadores es positiva? '),
+(95, 'Si en alguno no lo fuera, ¿se han averiguado las causas y establecido las acciones de mejora adecuadas?'),
+(96, '¿Se comparan los índices de satisfacción de los empleados con los de otras Unidades o Universidades? '),
+(97, 'Respecto a dichos indicadores, ¿en qué situación competitiva situamos a la Unidad Organizativa?'),
+(98, '¿Ha identificado la Facultad con qué procesos están relacionados los índices de satisfacción de los empleados, y con qué indicadores de dichos procesos puede existir una correspondencia?'),
+(99, 'Sobre los indicadores de dichos procesos, que inciden directamente en la satisfacción de los empleados, ¿se marcan objetivos y se miden los resultados obtenidos? '),
+(100, '¿La tendencia de dichos indicadores es positiva? '),
+(101, 'Si en alguno no lo fuera, ¿se han averiguado las causas y establecido las acciones de mejora adecuadas?'),
+(102, '¿Se comparan los resultados de dichos indicadores con los de otras unidades de la propia Universidad y/o Universidades? '),
+(103, 'Respecto a dichos indicadores, ¿en qué situación situamos a la Unidad Organizativa?'),
+(104, '¿Identifica y mide la Unidad Organizativa el nivel de percepción que tiene la Sociedad respecto a aquellos aspectos de especial sensibilidad social en su esfera de influencia? '),
+(105, '¿La tendencia de dichos indicadores es positiva? '),
+(106, 'Si en alguno no lo fuera, ¿se han averiguado las causas y establecido las acciones de mejora adecuadas?'),
+(107, '¿Ha identificado la Unidad Organizativa con qué procesos están relacionados los índices de percepción social, y con qué indicadores de dichos procesos puede existir una correspondencia? '),
+(108, '¿Se marcan objetivos sobre dichos indicadores y se miden los resultados obtenidos? '),
+(109, '¿La tendencia de dichos indicadores es positiva? '),
+(110, 'Si en alguno no lo fuera, ¿se han averiguado las causas y establecido las acciones de mejora adecuadas?'),
+(111, '¿Se comparan los índices de percepción social de la Unidad Organizativa con los de otras Unidades de la propia Universidad o con Unidades Organizativas similares y de Universidades líderes? '),
+(112, 'Respecto a dichos indicadores, ¿en qué situación competitiva situamos a la Unidad Organizativa?'),
+(113, '¿Define objetivos y mide la Unidad Organizativa de forma periódica y sistemática sus Resultados Clave, y especialmente los económico-financieros?'),
+(114, '¿Los objetivos son cada vez más exigentes y los resultados muestran una tendencia positiva? '),
+(115, 'Si alguno de los Resultados Clave no reflejara una tendencia positiva, ¿se han averiguado las causas y establecido las acciones de mejora adecuadas?'),
+(116, '¿Se comparan los Resultados Clave con los de otras unidades organizativas o  universidades? '),
+(117, 'Respecto a dichos indicadores de Resultados Clave, ¿en qué situación competitiva situamos a la Unidad Organizativa?'),
+(118, 'Además de dichos Resultados Clave, ¿define objetivos y mide la Facultadde forma periódica y sistemática otros resultados correspondientes a procesos de soporte, que contribuyen de manera sustancial a la consecución de los anteriores?'),
+(119, 'Los objetivos de dichos indicadores correspondientes a procesos de soporte, ¿son cada vez más exigentes y los resultados muestran una tendencia positiva?'),
+(120, 'Si alguno de los resultados no reflejara una tendencia positiva, ¿se han averiguado las causas y establecido las acciones de mejora adecuadas?'),
+(121, '¿Se comparan los resultados de los indicadores de procesos de soporte con los de otras Unidades Organizativas o Universidades? '),
+(122, 'Respecto a dichos indicadores, ¿en qué situación competitiva situamos a la Unidad Organizativa?');
+
+INSERT INTO `priority` (`idpriority`, `description`) VALUES
+(1, 'Baja'),
+(2, 'Media'),
+(3, 'Alta');
+
+INSERT INTO `process` (`idprocess`, `description`) VALUES
+(1, 'P1'),
+(2, 'P2'),
+(3, 'P3'),
+(4, 'P4'),
+(5, 'P5'),
+(6, 'P6'),
+(7, 'P7');
+
+INSERT INTO `pc_subcriteria` (`idpcs`, `subcriteria`, `period_criteria`, `period`, `adjustment`, `percentage`) VALUES
+(8, 1, 10, 1, '1.00', '0.00'),
+(9, 2, 10, 1, '0.50', '0.00'),
+(10, 3, 10, 1, '1.00', '0.00'),
+(11, 4, 10, 1, '1.00', '0.00'),
+(12, 5, 10, 1, '0.75', '0.00'),
+(13, 6, 11, 1, '0.75', '0.00'),
+(14, 7, 11, 1, '1.00', '0.00'),
+(15, 8, 11, 1, '1.00', '0.00'),
+(16, 9, 11, 1, '1.00', '0.00'),
+(17, 10, 12, 1, '1.00', '0.00'),
+(18, 11, 12, 1, '0.50', '0.00'),
+(19, 12, 12, 1, '0.25', '0.00'),
+(20, 13, 12, 1, '0.50', '0.00'),
+(21, 14, 12, 1, '0.25', '0.00'),
+(22, 15, 13, 1, '1.00', '0.00'),
+(23, 16, 13, 1, '1.00', '0.00'),
+(24, 17, 13, 1, '1.00', '0.00'),
+(25, 18, 13, 1, '1.00', '0.00'),
+(26, 19, 13, 1, '0.50', '0.00'),
+(27, 20, 14, 1, '1.00', '0.00'),
+(28, 21, 14, 1, '1.00', '0.00'),
+(29, 22, 14, 1, '1.00', '0.00'),
+(30, 23, 14, 1, '0.75', '0.00'),
+(31, 24, 14, 1, '0.75', '0.00'),
+(32, 25, 15, 1, '0.50', '0.75'),
+(33, 26, 15, 1, '0.75', '0.25'),
+(34, 27, 16, 1, '1.00', '0.75'),
+(35, 28, 16, 1, '1.00', '0.25'),
+(36, 29, 17, 1, '0.50', '0.50'),
+(37, 30, 17, 1, '0.50', '0.50'),
+(38, 31, 18, 1, '0.50', '0.50'),
+(39, 32, 18, 1, '1.00', '0.50'),
+(40, 1, 19, 3, '1.00', '0.00'),
+(41, 2, 19, 3, '0.50', '0.00'),
+(42, 3, 19, 3, '1.00', '0.00'),
+(43, 4, 19, 3, '1.00', '0.00'),
+(44, 5, 19, 3, '0.75', '0.00'),
+(45, 6, 20, 3, '0.75', '0.00'),
+(46, 7, 20, 3, '1.00', '0.00'),
+(47, 8, 20, 3, '1.00', '0.00'),
+(48, 9, 20, 3, '1.00', '0.00'),
+(49, 10, 21, 3, '1.00', '0.00'),
+(50, 11, 21, 3, '0.50', '0.00'),
+(51, 12, 21, 3, '0.25', '0.00'),
+(52, 13, 21, 3, '0.50', '0.00'),
+(53, 14, 21, 3, '0.25', '0.00'),
+(54, 15, 22, 3, '1.00', '0.00'),
+(55, 16, 22, 3, '1.00', '0.00'),
+(56, 17, 22, 3, '1.00', '0.00'),
+(57, 18, 22, 3, '1.00', '0.00'),
+(58, 19, 22, 3, '0.50', '0.00'),
+(59, 20, 23, 3, '1.00', '0.00'),
+(60, 21, 23, 3, '1.00', '0.00'),
+(61, 22, 23, 3, '1.00', '0.00'),
+(62, 23, 23, 3, '0.75', '0.00'),
+(63, 24, 23, 3, '0.75', '0.00'),
+(64, 25, 24, 3, '0.50', '0.75'),
+(65, 26, 24, 3, '0.75', '0.25'),
+(66, 27, 25, 3, '1.00', '0.75'),
+(67, 28, 25, 3, '1.00', '0.25'),
+(68, 29, 26, 3, '0.50', '0.50'),
+(69, 30, 26, 3, '0.50', '0.50'),
+(70, 31, 27, 3, '0.50', '0.50'),
+(71, 32, 27, 3, '1.00', '0.50');
+
+INSERT INTO `pcs_process` (`idpcsp`, `process`, `pc_subcriteria`, `period_criteria`, `period`) VALUES
+(8, 1, 8, 10, 1),
+(14, 1, 13, 11, 1),
+(18, 1, 17, 12, 1),
+(23, 1, 22, 13, 1),
+(28, 1, 27, 14, 1),
+(35, 1, 32, 15, 1),
+(42, 1, 34, 16, 1),
+(48, 1, 36, 17, 1),
+(51, 1, 38, 18, 1),
+(58, 1, 40, 19, 3),
+(64, 1, 45, 20, 3),
+(68, 1, 49, 21, 3),
+(73, 1, 54, 22, 3),
+(78, 1, 59, 23, 3),
+(85, 1, 64, 24, 3),
+(92, 1, 66, 25, 3),
+(98, 1, 68, 26, 3),
+(101, 1, 70, 27, 3),
+(9, 2, 9, 10, 1),
+(15, 2, 14, 11, 1),
+(19, 2, 18, 12, 1),
+(24, 2, 23, 13, 1),
+(29, 2, 27, 14, 1),
+(36, 2, 32, 15, 1),
+(43, 2, 34, 16, 1),
+(49, 2, 37, 17, 1),
+(52, 2, 38, 18, 1),
+(59, 2, 41, 19, 3),
+(65, 2, 46, 20, 3),
+(69, 2, 50, 21, 3),
+(74, 2, 55, 22, 3),
+(79, 2, 59, 23, 3),
+(86, 2, 64, 24, 3),
+(93, 2, 66, 25, 3),
+(99, 2, 69, 26, 3),
+(102, 2, 70, 27, 3),
+(10, 3, 10, 10, 1),
+(16, 3, 15, 11, 1),
+(20, 3, 19, 12, 1),
+(25, 3, 24, 13, 1),
+(30, 3, 28, 14, 1),
+(37, 3, 32, 15, 1),
+(44, 3, 34, 16, 1),
+(50, 3, 37, 17, 1),
+(53, 3, 38, 18, 1),
+(60, 3, 42, 19, 3),
+(66, 3, 47, 20, 3),
+(70, 3, 51, 21, 3),
+(75, 3, 56, 22, 3),
+(80, 3, 60, 23, 3),
+(87, 3, 64, 24, 3),
+(94, 3, 66, 25, 3),
+(100, 3, 69, 26, 3),
+(103, 3, 70, 27, 3),
+(11, 4, 11, 10, 1),
+(17, 4, 16, 11, 1),
+(21, 4, 20, 12, 1),
+(26, 4, 25, 13, 1),
+(31, 4, 29, 14, 1),
+(38, 4, 32, 15, 1),
+(45, 4, 35, 16, 1),
+(54, 4, 39, 18, 1),
+(61, 4, 43, 19, 3),
+(67, 4, 48, 20, 3),
+(71, 4, 52, 21, 3),
+(76, 4, 57, 22, 3),
+(81, 4, 61, 23, 3),
+(88, 4, 64, 24, 3),
+(95, 4, 67, 25, 3),
+(104, 4, 71, 27, 3),
+(12, 5, 11, 10, 1),
+(22, 5, 21, 12, 1),
+(27, 5, 26, 13, 1),
+(32, 5, 29, 14, 1),
+(39, 5, 33, 15, 1),
+(46, 5, 35, 16, 1),
+(55, 5, 39, 18, 1),
+(62, 5, 43, 19, 3),
+(72, 5, 53, 21, 3),
+(77, 5, 58, 22, 3),
+(82, 5, 61, 23, 3),
+(89, 5, 65, 24, 3),
+(96, 5, 67, 25, 3),
+(105, 5, 71, 27, 3),
+(13, 6, 12, 10, 1),
+(33, 6, 30, 14, 1),
+(40, 6, 33, 15, 1),
+(47, 6, 35, 16, 1),
+(56, 6, 39, 18, 1),
+(63, 6, 44, 19, 3),
+(83, 6, 62, 23, 3),
+(90, 6, 65, 24, 3),
+(97, 6, 67, 25, 3),
+(106, 6, 71, 27, 3),
+(34, 7, 31, 14, 1),
+(41, 7, 33, 15, 1),
+(57, 7, 39, 18, 1),
+(84, 7, 63, 23, 3),
+(91, 7, 65, 24, 3),
+(107, 7, 71, 27, 3);
+
+INSERT INTO `pcsp_questions` (`idpcspq`, `questions_idquestions`, `pcs_process`, `pc_subcriteria`, `period_criteria`, `period`) VALUES
+(10, 12, 8, 8, 10, 1),
+(11, 13, 8, 8, 10, 1),
+(12, 14, 8, 8, 10, 1),
+(13, 15, 9, 9, 10, 1),
+(14, 16, 10, 10, 10, 1),
+(15, 17, 10, 10, 10, 1),
+(16, 18, 11, 11, 10, 1),
+(17, 19, 11, 11, 10, 1),
+(18, 20, 11, 11, 10, 1),
+(19, 21, 12, 11, 10, 1),
+(20, 22, 12, 11, 10, 1),
+(21, 23, 12, 11, 10, 1),
+(22, 24, 13, 12, 10, 1),
+(23, 25, 13, 12, 10, 1),
+(24, 26, 13, 12, 10, 1),
+(25, 27, 14, 13, 11, 1),
+(26, 28, 15, 14, 11, 1),
+(27, 29, 16, 15, 11, 1),
+(28, 30, 16, 15, 11, 1),
+(29, 31, 16, 15, 11, 1),
+(30, 32, 17, 16, 11, 1),
+(31, 33, 17, 16, 11, 1),
+(32, 34, 17, 16, 11, 1),
+(33, 35, 18, 17, 12, 1),
+(34, 36, 18, 17, 12, 1),
+(35, 37, 19, 18, 12, 1),
+(36, 38, 19, 18, 12, 1),
+(37, 39, 19, 18, 12, 1),
+(38, 40, 20, 19, 12, 1),
+(39, 41, 20, 19, 12, 1),
+(40, 42, 20, 19, 12, 1),
+(41, 43, 21, 20, 12, 1),
+(42, 44, 21, 20, 12, 1),
+(43, 45, 21, 20, 12, 1),
+(44, 46, 22, 21, 12, 1),
+(45, 47, 22, 21, 12, 1),
+(46, 48, 22, 21, 12, 1),
+(47, 49, 22, 21, 12, 1),
+(48, 50, 23, 22, 13, 1),
+(49, 51, 23, 22, 13, 1),
+(50, 52, 24, 23, 13, 1),
+(51, 53, 24, 23, 13, 1),
+(52, 54, 24, 23, 13, 1),
+(53, 55, 25, 24, 13, 1),
+(54, 56, 25, 24, 13, 1),
+(55, 57, 25, 24, 13, 1),
+(56, 58, 26, 25, 13, 1),
+(57, 59, 26, 25, 13, 1),
+(58, 60, 27, 26, 13, 1),
+(59, 61, 27, 26, 13, 1),
+(60, 62, 27, 26, 13, 1),
+(61, 63, 28, 27, 14, 1),
+(62, 64, 28, 27, 14, 1),
+(63, 65, 29, 27, 14, 1),
+(64, 66, 29, 27, 14, 1),
+(65, 67, 30, 28, 14, 1),
+(66, 68, 30, 28, 14, 1),
+(67, 69, 31, 29, 14, 1),
+(68, 70, 31, 29, 14, 1),
+(69, 71, 32, 29, 14, 1),
+(70, 72, 33, 30, 14, 1),
+(71, 73, 33, 30, 14, 1),
+(72, 74, 33, 30, 14, 1),
+(73, 75, 34, 31, 14, 1),
+(74, 76, 34, 31, 14, 1),
+(75, 77, 34, 31, 14, 1),
+(76, 78, 35, 32, 15, 1),
+(77, 79, 35, 32, 15, 1),
+(78, 80, 36, 32, 15, 1),
+(79, 81, 37, 32, 15, 1),
+(80, 82, 37, 32, 15, 1),
+(81, 83, 37, 32, 15, 1),
+(82, 84, 38, 32, 15, 1),
+(83, 85, 38, 32, 15, 1),
+(84, 86, 39, 33, 15, 1),
+(85, 87, 40, 33, 15, 1),
+(86, 88, 40, 33, 15, 1),
+(87, 89, 40, 33, 15, 1),
+(88, 90, 41, 33, 15, 1),
+(89, 91, 41, 33, 15, 1),
+(90, 92, 42, 34, 16, 1),
+(91, 93, 43, 34, 16, 1),
+(92, 94, 43, 34, 16, 1),
+(93, 95, 43, 34, 16, 1),
+(94, 96, 44, 34, 16, 1),
+(95, 97, 44, 34, 16, 1),
+(96, 98, 45, 35, 16, 1),
+(97, 99, 46, 35, 16, 1),
+(98, 100, 46, 35, 16, 1),
+(99, 101, 46, 35, 16, 1),
+(100, 102, 47, 35, 16, 1),
+(101, 103, 47, 35, 16, 1),
+(102, 104, 48, 36, 17, 1),
+(103, 105, 48, 36, 17, 1),
+(104, 106, 48, 36, 17, 1),
+(105, 107, 49, 37, 17, 1),
+(106, 108, 49, 37, 17, 1),
+(107, 109, 49, 37, 17, 1),
+(108, 110, 49, 37, 17, 1),
+(109, 111, 50, 37, 17, 1),
+(110, 112, 50, 37, 17, 1),
+(111, 113, 51, 38, 18, 1),
+(112, 114, 52, 38, 18, 1),
+(113, 115, 52, 38, 18, 1),
+(114, 116, 53, 38, 18, 1),
+(115, 117, 53, 38, 18, 1),
+(116, 118, 54, 39, 18, 1),
+(117, 119, 55, 39, 18, 1),
+(118, 120, 56, 39, 18, 1),
+(119, 121, 57, 39, 18, 1),
+(120, 122, 57, 39, 18, 1),
+(121, 12, 58, 40, 19, 3),
+(122, 13, 58, 40, 19, 3),
+(123, 14, 58, 40, 19, 3),
+(124, 15, 59, 41, 19, 3),
+(125, 16, 60, 42, 19, 3),
+(126, 17, 60, 42, 19, 3),
+(127, 18, 61, 43, 19, 3),
+(128, 19, 61, 43, 19, 3),
+(129, 20, 61, 43, 19, 3),
+(130, 21, 62, 43, 19, 3),
+(131, 22, 62, 43, 19, 3),
+(132, 23, 62, 43, 19, 3),
+(133, 24, 63, 44, 19, 3),
+(134, 25, 63, 44, 19, 3),
+(135, 26, 63, 44, 19, 3),
+(136, 27, 64, 45, 20, 3),
+(137, 28, 65, 46, 20, 3),
+(138, 29, 66, 47, 20, 3),
+(139, 30, 66, 47, 20, 3),
+(140, 31, 66, 47, 20, 3),
+(141, 32, 67, 48, 20, 3),
+(142, 33, 67, 48, 20, 3),
+(143, 34, 67, 48, 20, 3),
+(144, 35, 68, 49, 21, 3),
+(145, 36, 68, 49, 21, 3),
+(146, 37, 69, 50, 21, 3),
+(147, 38, 69, 50, 21, 3),
+(148, 39, 69, 50, 21, 3),
+(149, 40, 70, 51, 21, 3),
+(150, 41, 70, 51, 21, 3),
+(151, 42, 70, 51, 21, 3),
+(152, 43, 71, 52, 21, 3),
+(153, 44, 71, 52, 21, 3),
+(154, 45, 71, 52, 21, 3),
+(155, 46, 72, 53, 21, 3),
+(156, 47, 72, 53, 21, 3),
+(157, 48, 72, 53, 21, 3),
+(158, 49, 72, 53, 21, 3),
+(159, 50, 73, 54, 22, 3),
+(160, 51, 73, 54, 22, 3),
+(161, 52, 74, 55, 22, 3),
+(162, 53, 74, 55, 22, 3),
+(163, 54, 74, 55, 22, 3),
+(164, 55, 75, 56, 22, 3),
+(165, 56, 75, 56, 22, 3),
+(166, 57, 75, 56, 22, 3),
+(167, 58, 76, 57, 22, 3),
+(168, 59, 76, 57, 22, 3),
+(169, 60, 77, 58, 22, 3),
+(170, 61, 77, 58, 22, 3),
+(171, 62, 77, 58, 22, 3),
+(172, 63, 78, 59, 23, 3),
+(173, 64, 78, 59, 23, 3),
+(174, 65, 79, 59, 23, 3),
+(175, 66, 79, 59, 23, 3),
+(176, 67, 80, 60, 23, 3),
+(177, 68, 80, 60, 23, 3),
+(178, 69, 81, 61, 23, 3),
+(179, 70, 81, 61, 23, 3),
+(180, 71, 82, 61, 23, 3),
+(181, 72, 83, 62, 23, 3),
+(182, 73, 83, 62, 23, 3),
+(183, 74, 83, 62, 23, 3),
+(184, 75, 84, 63, 23, 3),
+(185, 76, 84, 63, 23, 3),
+(186, 77, 84, 63, 23, 3),
+(187, 78, 85, 64, 24, 3),
+(188, 79, 85, 64, 24, 3),
+(189, 80, 86, 64, 24, 3),
+(190, 81, 87, 64, 24, 3),
+(191, 82, 87, 64, 24, 3),
+(192, 83, 87, 64, 24, 3),
+(193, 84, 88, 64, 24, 3),
+(194, 85, 88, 64, 24, 3),
+(195, 86, 89, 65, 24, 3),
+(196, 87, 90, 65, 24, 3),
+(197, 88, 90, 65, 24, 3),
+(198, 89, 90, 65, 24, 3),
+(199, 90, 91, 65, 24, 3),
+(200, 91, 91, 65, 24, 3),
+(201, 92, 92, 66, 25, 3),
+(202, 93, 93, 66, 25, 3),
+(203, 94, 93, 66, 25, 3),
+(204, 95, 93, 66, 25, 3),
+(205, 96, 94, 66, 25, 3),
+(206, 97, 94, 66, 25, 3),
+(207, 98, 95, 67, 25, 3),
+(208, 99, 96, 67, 25, 3),
+(209, 100, 96, 67, 25, 3),
+(210, 101, 96, 67, 25, 3),
+(211, 102, 97, 67, 25, 3),
+(212, 103, 97, 67, 25, 3),
+(213, 104, 98, 68, 26, 3),
+(214, 105, 98, 68, 26, 3),
+(215, 106, 98, 68, 26, 3),
+(216, 107, 99, 69, 26, 3),
+(217, 108, 99, 69, 26, 3),
+(218, 109, 99, 69, 26, 3),
+(219, 110, 99, 69, 26, 3),
+(220, 111, 100, 69, 26, 3),
+(221, 112, 100, 69, 26, 3),
+(222, 113, 101, 70, 27, 3),
+(223, 114, 102, 70, 27, 3),
+(224, 115, 102, 70, 27, 3),
+(225, 116, 103, 70, 27, 3),
+(226, 117, 103, 70, 27, 3),
+(227, 118, 104, 71, 27, 3),
+(228, 119, 105, 71, 27, 3),
+(229, 120, 106, 71, 27, 3),
+(230, 121, 107, 71, 27, 3),
+(231, 122, 107, 71, 27, 3);
 
 INSERT INTO `average_criteria` (`idaverage_criteria`, `period_criteria`, `period`, `value`) VALUES
 (15, 10, 1, '39.43'),
@@ -81,29 +1066,6 @@ INSERT INTO `average_criteria` (`idaverage_criteria`, `period_criteria`, `period
 (59, 25, 3, '10.50'),
 (60, 26, 3, '6.56'),
 (61, 27, 3, '17.06');
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `average_process`
---
-
-CREATE TABLE IF NOT EXISTS `average_process` (
-  `idag` int(11) NOT NULL AUTO_INCREMENT,
-  `pcs_process` int(11) NOT NULL,
-  `pc_subcriteria` int(11) NOT NULL,
-  `period_criteria` int(11) NOT NULL,
-  `period` int(11) NOT NULL,
-  `min` decimal(5,2) NOT NULL,
-  `max` decimal(5,2) NOT NULL,
-  `consensus` decimal(5,2) NOT NULL,
-  PRIMARY KEY (`idag`),
-  KEY `fk_average_process_pcs_process1_idx` (`pcs_process`,`pc_subcriteria`,`period_criteria`,`period`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=164 ;
-
---
--- Volcado de datos para la tabla `average_process`
---
 
 INSERT INTO `average_process` (`idag`, `pcs_process`, `pc_subcriteria`, `period_criteria`, `period`, `min`, `max`, `consensus`) VALUES
 (1, 8, 8, 10, 1, '33.33', '66.67', '46.88'),
@@ -256,27 +1218,6 @@ INSERT INTO `average_process` (`idag`, `pcs_process`, `pc_subcriteria`, `period_
 (148, 105, 71, 27, 3, '0.00', '112.00', '42.00'),
 (149, 106, 71, 27, 3, '0.00', '112.00', '37.38'),
 (150, 107, 71, 27, 3, '0.00', '150.00', '32.75');
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `average_responses`
---
-
-CREATE TABLE IF NOT EXISTS `average_responses` (
-  `idar` int(11) NOT NULL AUTO_INCREMENT,
-  `criteria` int(11) NOT NULL,
-  `subcriteria` int(11) NOT NULL,
-  `process` int(11) NOT NULL,
-  `value` decimal(5,2) NOT NULL,
-  `period` int(11) NOT NULL,
-  PRIMARY KEY (`idar`),
-  KEY `fk_average_responses_poll1_idx` (`period`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1046 ;
-
---
--- Volcado de datos para la tabla `average_responses`
---
 
 INSERT INTO `average_responses` (`idar`, `criteria`, `subcriteria`, `process`, `value`, `period`) VALUES
 (64, 10, 8, 8, '66.67', 1),
@@ -1080,27 +2021,6 @@ INSERT INTO `average_responses` (`idar`, `criteria`, `subcriteria`, `process`, `
 (1044, 27, 71, 106, '0.00', 3),
 (1045, 27, 71, 107, '0.00', 3);
 
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `average_subcriteria`
---
-
-CREATE TABLE IF NOT EXISTS `average_subcriteria` (
-  `idas` int(11) NOT NULL AUTO_INCREMENT,
-  `pc_subcriteria` int(11) NOT NULL,
-  `period_criteria` int(11) NOT NULL,
-  `period` int(11) NOT NULL,
-  `partial` decimal(5,2) DEFAULT NULL,
-  `total` decimal(5,2) DEFAULT NULL,
-  PRIMARY KEY (`idas`),
-  KEY `fk_average_subcriteria_pc_subcriteria1_idx` (`pc_subcriteria`,`period_criteria`,`period`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=125 ;
-
---
--- Volcado de datos para la tabla `average_subcriteria`
---
-
 INSERT INTO `average_subcriteria` (`idas`, `pc_subcriteria`, `period_criteria`, `period`, `partial`, `total`) VALUES
 (1, 8, 10, 1, NULL, '46.88'),
 (2, 9, 10, 1, NULL, '14.07'),
@@ -1198,772 +2118,6 @@ INSERT INTO `average_subcriteria` (`idas`, `pc_subcriteria`, `period_criteria`, 
 (115, 69, 26, 3, '22.27', '5.57'),
 (116, 70, 27, 3, '61.58', '15.40'),
 (117, 71, 27, 3, '37.41', '18.71');
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `criteria`
---
-
-CREATE TABLE IF NOT EXISTS `criteria` (
-  `idcriteria` int(11) NOT NULL AUTO_INCREMENT,
-  `description` varchar(150) NOT NULL,
-  `type` int(11) NOT NULL,
-  PRIMARY KEY (`idcriteria`),
-  KEY `fk_criteria_type1_idx` (`type`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=10 ;
-
---
--- Volcado de datos para la tabla `criteria`
---
-
-INSERT INTO `criteria` (`idcriteria`, `description`, `type`) VALUES
-(1, 'Liderazgo', 1),
-(2, 'Estrategia', 1),
-(3, 'Personas', 1),
-(4, 'Alianzas y Recursos', 1),
-(5, 'Procesos, Productos y Servicios', 1),
-(6, 'Resultados en los Clientes', 2),
-(7, 'Resultados en las Personas', 3),
-(8, 'Resultados en la Sociedad', 1),
-(9, 'Resultados Clave', 2);
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `improvements`
---
-
-CREATE TABLE IF NOT EXISTS `improvements` (
-  `idimprovements` int(11) NOT NULL AUTO_INCREMENT,
-  `title` varchar(100) NOT NULL,
-  `description` longtext NOT NULL,
-  `period` int(11) NOT NULL,
-  `priority` int(11) NOT NULL,
-  `status` int(11) NOT NULL,
-  PRIMARY KEY (`idimprovements`),
-  UNIQUE KEY `idimprovements_UNIQUE` (`idimprovements`),
-  KEY `fk_improvements_period1_idx` (`period`),
-  KEY `fk_improvements_priority1_idx` (`priority`),
-  KEY `fk_improvements_status1_idx` (`status`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `pcsp_questions`
---
-
-CREATE TABLE IF NOT EXISTS `pcsp_questions` (
-  `idpcspq` int(11) NOT NULL AUTO_INCREMENT,
-  `questions_idquestions` int(11) NOT NULL,
-  `pcs_process` int(11) NOT NULL,
-  `pc_subcriteria` int(11) NOT NULL,
-  `period_criteria` int(11) NOT NULL,
-  `period` int(11) NOT NULL,
-  PRIMARY KEY (`idpcspq`,`pcs_process`,`pc_subcriteria`,`period_criteria`,`period`),
-  KEY `fk_pcsp_questions_questions1_idx` (`questions_idquestions`),
-  KEY `fk_pcsp_questions_pcs_process1_idx` (`pcs_process`,`pc_subcriteria`,`period_criteria`,`period`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=232 ;
-
---
--- Volcado de datos para la tabla `pcsp_questions`
---
-
-INSERT INTO `pcsp_questions` (`idpcspq`, `questions_idquestions`, `pcs_process`, `pc_subcriteria`, `period_criteria`, `period`) VALUES
-(10, 12, 8, 8, 10, 1),
-(11, 13, 8, 8, 10, 1),
-(12, 14, 8, 8, 10, 1),
-(13, 15, 9, 9, 10, 1),
-(14, 16, 10, 10, 10, 1),
-(15, 17, 10, 10, 10, 1),
-(16, 18, 11, 11, 10, 1),
-(17, 19, 11, 11, 10, 1),
-(18, 20, 11, 11, 10, 1),
-(19, 21, 12, 11, 10, 1),
-(20, 22, 12, 11, 10, 1),
-(21, 23, 12, 11, 10, 1),
-(22, 24, 13, 12, 10, 1),
-(23, 25, 13, 12, 10, 1),
-(24, 26, 13, 12, 10, 1),
-(25, 27, 14, 13, 11, 1),
-(26, 28, 15, 14, 11, 1),
-(27, 29, 16, 15, 11, 1),
-(28, 30, 16, 15, 11, 1),
-(29, 31, 16, 15, 11, 1),
-(30, 32, 17, 16, 11, 1),
-(31, 33, 17, 16, 11, 1),
-(32, 34, 17, 16, 11, 1),
-(33, 35, 18, 17, 12, 1),
-(34, 36, 18, 17, 12, 1),
-(35, 37, 19, 18, 12, 1),
-(36, 38, 19, 18, 12, 1),
-(37, 39, 19, 18, 12, 1),
-(38, 40, 20, 19, 12, 1),
-(39, 41, 20, 19, 12, 1),
-(40, 42, 20, 19, 12, 1),
-(41, 43, 21, 20, 12, 1),
-(42, 44, 21, 20, 12, 1),
-(43, 45, 21, 20, 12, 1),
-(44, 46, 22, 21, 12, 1),
-(45, 47, 22, 21, 12, 1),
-(46, 48, 22, 21, 12, 1),
-(47, 49, 22, 21, 12, 1),
-(48, 50, 23, 22, 13, 1),
-(49, 51, 23, 22, 13, 1),
-(50, 52, 24, 23, 13, 1),
-(51, 53, 24, 23, 13, 1),
-(52, 54, 24, 23, 13, 1),
-(53, 55, 25, 24, 13, 1),
-(54, 56, 25, 24, 13, 1),
-(55, 57, 25, 24, 13, 1),
-(56, 58, 26, 25, 13, 1),
-(57, 59, 26, 25, 13, 1),
-(58, 60, 27, 26, 13, 1),
-(59, 61, 27, 26, 13, 1),
-(60, 62, 27, 26, 13, 1),
-(61, 63, 28, 27, 14, 1),
-(62, 64, 28, 27, 14, 1),
-(63, 65, 29, 27, 14, 1),
-(64, 66, 29, 27, 14, 1),
-(65, 67, 30, 28, 14, 1),
-(66, 68, 30, 28, 14, 1),
-(67, 69, 31, 29, 14, 1),
-(68, 70, 31, 29, 14, 1),
-(69, 71, 32, 29, 14, 1),
-(70, 72, 33, 30, 14, 1),
-(71, 73, 33, 30, 14, 1),
-(72, 74, 33, 30, 14, 1),
-(73, 75, 34, 31, 14, 1),
-(74, 76, 34, 31, 14, 1),
-(75, 77, 34, 31, 14, 1),
-(76, 78, 35, 32, 15, 1),
-(77, 79, 35, 32, 15, 1),
-(78, 80, 36, 32, 15, 1),
-(79, 81, 37, 32, 15, 1),
-(80, 82, 37, 32, 15, 1),
-(81, 83, 37, 32, 15, 1),
-(82, 84, 38, 32, 15, 1),
-(83, 85, 38, 32, 15, 1),
-(84, 86, 39, 33, 15, 1),
-(85, 87, 40, 33, 15, 1),
-(86, 88, 40, 33, 15, 1),
-(87, 89, 40, 33, 15, 1),
-(88, 90, 41, 33, 15, 1),
-(89, 91, 41, 33, 15, 1),
-(90, 92, 42, 34, 16, 1),
-(91, 93, 43, 34, 16, 1),
-(92, 94, 43, 34, 16, 1),
-(93, 95, 43, 34, 16, 1),
-(94, 96, 44, 34, 16, 1),
-(95, 97, 44, 34, 16, 1),
-(96, 98, 45, 35, 16, 1),
-(97, 99, 46, 35, 16, 1),
-(98, 100, 46, 35, 16, 1),
-(99, 101, 46, 35, 16, 1),
-(100, 102, 47, 35, 16, 1),
-(101, 103, 47, 35, 16, 1),
-(102, 104, 48, 36, 17, 1),
-(103, 105, 48, 36, 17, 1),
-(104, 106, 48, 36, 17, 1),
-(105, 107, 49, 37, 17, 1),
-(106, 108, 49, 37, 17, 1),
-(107, 109, 49, 37, 17, 1),
-(108, 110, 49, 37, 17, 1),
-(109, 111, 50, 37, 17, 1),
-(110, 112, 50, 37, 17, 1),
-(111, 113, 51, 38, 18, 1),
-(112, 114, 52, 38, 18, 1),
-(113, 115, 52, 38, 18, 1),
-(114, 116, 53, 38, 18, 1),
-(115, 117, 53, 38, 18, 1),
-(116, 118, 54, 39, 18, 1),
-(117, 119, 55, 39, 18, 1),
-(118, 120, 56, 39, 18, 1),
-(119, 121, 57, 39, 18, 1),
-(120, 122, 57, 39, 18, 1),
-(121, 12, 58, 40, 19, 3),
-(122, 13, 58, 40, 19, 3),
-(123, 14, 58, 40, 19, 3),
-(124, 15, 59, 41, 19, 3),
-(125, 16, 60, 42, 19, 3),
-(126, 17, 60, 42, 19, 3),
-(127, 18, 61, 43, 19, 3),
-(128, 19, 61, 43, 19, 3),
-(129, 20, 61, 43, 19, 3),
-(130, 21, 62, 43, 19, 3),
-(131, 22, 62, 43, 19, 3),
-(132, 23, 62, 43, 19, 3),
-(133, 24, 63, 44, 19, 3),
-(134, 25, 63, 44, 19, 3),
-(135, 26, 63, 44, 19, 3),
-(136, 27, 64, 45, 20, 3),
-(137, 28, 65, 46, 20, 3),
-(138, 29, 66, 47, 20, 3),
-(139, 30, 66, 47, 20, 3),
-(140, 31, 66, 47, 20, 3),
-(141, 32, 67, 48, 20, 3),
-(142, 33, 67, 48, 20, 3),
-(143, 34, 67, 48, 20, 3),
-(144, 35, 68, 49, 21, 3),
-(145, 36, 68, 49, 21, 3),
-(146, 37, 69, 50, 21, 3),
-(147, 38, 69, 50, 21, 3),
-(148, 39, 69, 50, 21, 3),
-(149, 40, 70, 51, 21, 3),
-(150, 41, 70, 51, 21, 3),
-(151, 42, 70, 51, 21, 3),
-(152, 43, 71, 52, 21, 3),
-(153, 44, 71, 52, 21, 3),
-(154, 45, 71, 52, 21, 3),
-(155, 46, 72, 53, 21, 3),
-(156, 47, 72, 53, 21, 3),
-(157, 48, 72, 53, 21, 3),
-(158, 49, 72, 53, 21, 3),
-(159, 50, 73, 54, 22, 3),
-(160, 51, 73, 54, 22, 3),
-(161, 52, 74, 55, 22, 3),
-(162, 53, 74, 55, 22, 3),
-(163, 54, 74, 55, 22, 3),
-(164, 55, 75, 56, 22, 3),
-(165, 56, 75, 56, 22, 3),
-(166, 57, 75, 56, 22, 3),
-(167, 58, 76, 57, 22, 3),
-(168, 59, 76, 57, 22, 3),
-(169, 60, 77, 58, 22, 3),
-(170, 61, 77, 58, 22, 3),
-(171, 62, 77, 58, 22, 3),
-(172, 63, 78, 59, 23, 3),
-(173, 64, 78, 59, 23, 3),
-(174, 65, 79, 59, 23, 3),
-(175, 66, 79, 59, 23, 3),
-(176, 67, 80, 60, 23, 3),
-(177, 68, 80, 60, 23, 3),
-(178, 69, 81, 61, 23, 3),
-(179, 70, 81, 61, 23, 3),
-(180, 71, 82, 61, 23, 3),
-(181, 72, 83, 62, 23, 3),
-(182, 73, 83, 62, 23, 3),
-(183, 74, 83, 62, 23, 3),
-(184, 75, 84, 63, 23, 3),
-(185, 76, 84, 63, 23, 3),
-(186, 77, 84, 63, 23, 3),
-(187, 78, 85, 64, 24, 3),
-(188, 79, 85, 64, 24, 3),
-(189, 80, 86, 64, 24, 3),
-(190, 81, 87, 64, 24, 3),
-(191, 82, 87, 64, 24, 3),
-(192, 83, 87, 64, 24, 3),
-(193, 84, 88, 64, 24, 3),
-(194, 85, 88, 64, 24, 3),
-(195, 86, 89, 65, 24, 3),
-(196, 87, 90, 65, 24, 3),
-(197, 88, 90, 65, 24, 3),
-(198, 89, 90, 65, 24, 3),
-(199, 90, 91, 65, 24, 3),
-(200, 91, 91, 65, 24, 3),
-(201, 92, 92, 66, 25, 3),
-(202, 93, 93, 66, 25, 3),
-(203, 94, 93, 66, 25, 3),
-(204, 95, 93, 66, 25, 3),
-(205, 96, 94, 66, 25, 3),
-(206, 97, 94, 66, 25, 3),
-(207, 98, 95, 67, 25, 3),
-(208, 99, 96, 67, 25, 3),
-(209, 100, 96, 67, 25, 3),
-(210, 101, 96, 67, 25, 3),
-(211, 102, 97, 67, 25, 3),
-(212, 103, 97, 67, 25, 3),
-(213, 104, 98, 68, 26, 3),
-(214, 105, 98, 68, 26, 3),
-(215, 106, 98, 68, 26, 3),
-(216, 107, 99, 69, 26, 3),
-(217, 108, 99, 69, 26, 3),
-(218, 109, 99, 69, 26, 3),
-(219, 110, 99, 69, 26, 3),
-(220, 111, 100, 69, 26, 3),
-(221, 112, 100, 69, 26, 3),
-(222, 113, 101, 70, 27, 3),
-(223, 114, 102, 70, 27, 3),
-(224, 115, 102, 70, 27, 3),
-(225, 116, 103, 70, 27, 3),
-(226, 117, 103, 70, 27, 3),
-(227, 118, 104, 71, 27, 3),
-(228, 119, 105, 71, 27, 3),
-(229, 120, 106, 71, 27, 3),
-(230, 121, 107, 71, 27, 3),
-(231, 122, 107, 71, 27, 3);
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `pcs_process`
---
-
-CREATE TABLE IF NOT EXISTS `pcs_process` (
-  `idpcsp` int(11) NOT NULL AUTO_INCREMENT,
-  `process` int(11) NOT NULL,
-  `pc_subcriteria` int(11) NOT NULL,
-  `period_criteria` int(11) NOT NULL,
-  `period` int(11) NOT NULL,
-  PRIMARY KEY (`idpcsp`,`pc_subcriteria`,`period_criteria`,`period`),
-  KEY `fk_pcs_process_process1_idx` (`process`),
-  KEY `fk_pcs_process_pc_subcriteria1_idx` (`pc_subcriteria`,`period_criteria`,`period`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=108 ;
-
---
--- Volcado de datos para la tabla `pcs_process`
---
-
-INSERT INTO `pcs_process` (`idpcsp`, `process`, `pc_subcriteria`, `period_criteria`, `period`) VALUES
-(8, 1, 8, 10, 1),
-(14, 1, 13, 11, 1),
-(18, 1, 17, 12, 1),
-(23, 1, 22, 13, 1),
-(28, 1, 27, 14, 1),
-(35, 1, 32, 15, 1),
-(42, 1, 34, 16, 1),
-(48, 1, 36, 17, 1),
-(51, 1, 38, 18, 1),
-(58, 1, 40, 19, 3),
-(64, 1, 45, 20, 3),
-(68, 1, 49, 21, 3),
-(73, 1, 54, 22, 3),
-(78, 1, 59, 23, 3),
-(85, 1, 64, 24, 3),
-(92, 1, 66, 25, 3),
-(98, 1, 68, 26, 3),
-(101, 1, 70, 27, 3),
-(9, 2, 9, 10, 1),
-(15, 2, 14, 11, 1),
-(19, 2, 18, 12, 1),
-(24, 2, 23, 13, 1),
-(29, 2, 27, 14, 1),
-(36, 2, 32, 15, 1),
-(43, 2, 34, 16, 1),
-(49, 2, 37, 17, 1),
-(52, 2, 38, 18, 1),
-(59, 2, 41, 19, 3),
-(65, 2, 46, 20, 3),
-(69, 2, 50, 21, 3),
-(74, 2, 55, 22, 3),
-(79, 2, 59, 23, 3),
-(86, 2, 64, 24, 3),
-(93, 2, 66, 25, 3),
-(99, 2, 69, 26, 3),
-(102, 2, 70, 27, 3),
-(10, 3, 10, 10, 1),
-(16, 3, 15, 11, 1),
-(20, 3, 19, 12, 1),
-(25, 3, 24, 13, 1),
-(30, 3, 28, 14, 1),
-(37, 3, 32, 15, 1),
-(44, 3, 34, 16, 1),
-(50, 3, 37, 17, 1),
-(53, 3, 38, 18, 1),
-(60, 3, 42, 19, 3),
-(66, 3, 47, 20, 3),
-(70, 3, 51, 21, 3),
-(75, 3, 56, 22, 3),
-(80, 3, 60, 23, 3),
-(87, 3, 64, 24, 3),
-(94, 3, 66, 25, 3),
-(100, 3, 69, 26, 3),
-(103, 3, 70, 27, 3),
-(11, 4, 11, 10, 1),
-(17, 4, 16, 11, 1),
-(21, 4, 20, 12, 1),
-(26, 4, 25, 13, 1),
-(31, 4, 29, 14, 1),
-(38, 4, 32, 15, 1),
-(45, 4, 35, 16, 1),
-(54, 4, 39, 18, 1),
-(61, 4, 43, 19, 3),
-(67, 4, 48, 20, 3),
-(71, 4, 52, 21, 3),
-(76, 4, 57, 22, 3),
-(81, 4, 61, 23, 3),
-(88, 4, 64, 24, 3),
-(95, 4, 67, 25, 3),
-(104, 4, 71, 27, 3),
-(12, 5, 11, 10, 1),
-(22, 5, 21, 12, 1),
-(27, 5, 26, 13, 1),
-(32, 5, 29, 14, 1),
-(39, 5, 33, 15, 1),
-(46, 5, 35, 16, 1),
-(55, 5, 39, 18, 1),
-(62, 5, 43, 19, 3),
-(72, 5, 53, 21, 3),
-(77, 5, 58, 22, 3),
-(82, 5, 61, 23, 3),
-(89, 5, 65, 24, 3),
-(96, 5, 67, 25, 3),
-(105, 5, 71, 27, 3),
-(13, 6, 12, 10, 1),
-(33, 6, 30, 14, 1),
-(40, 6, 33, 15, 1),
-(47, 6, 35, 16, 1),
-(56, 6, 39, 18, 1),
-(63, 6, 44, 19, 3),
-(83, 6, 62, 23, 3),
-(90, 6, 65, 24, 3),
-(97, 6, 67, 25, 3),
-(106, 6, 71, 27, 3),
-(34, 7, 31, 14, 1),
-(41, 7, 33, 15, 1),
-(57, 7, 39, 18, 1),
-(84, 7, 63, 23, 3),
-(91, 7, 65, 24, 3),
-(107, 7, 71, 27, 3);
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `pc_subcriteria`
---
-
-CREATE TABLE IF NOT EXISTS `pc_subcriteria` (
-  `idpcs` int(11) NOT NULL AUTO_INCREMENT,
-  `subcriteria` int(11) NOT NULL,
-  `period_criteria` int(11) NOT NULL,
-  `period` int(11) NOT NULL,
-  `adjustment` decimal(5,2) DEFAULT NULL,
-  `percentage` decimal(5,2) DEFAULT NULL,
-  PRIMARY KEY (`idpcs`,`period_criteria`,`period`),
-  KEY `fk_pc_subcriteria_subcriteria1_idx` (`subcriteria`),
-  KEY `fk_pc_subcriteria_period_criteria1_idx` (`period_criteria`,`period`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=72 ;
-
---
--- Volcado de datos para la tabla `pc_subcriteria`
---
-
-INSERT INTO `pc_subcriteria` (`idpcs`, `subcriteria`, `period_criteria`, `period`, `adjustment`, `percentage`) VALUES
-(8, 1, 10, 1, '1.00', '0.00'),
-(9, 2, 10, 1, '0.50', '0.00'),
-(10, 3, 10, 1, '1.00', '0.00'),
-(11, 4, 10, 1, '1.00', '0.00'),
-(12, 5, 10, 1, '0.75', '0.00'),
-(13, 6, 11, 1, '0.75', '0.00'),
-(14, 7, 11, 1, '1.00', '0.00'),
-(15, 8, 11, 1, '1.00', '0.00'),
-(16, 9, 11, 1, '1.00', '0.00'),
-(17, 10, 12, 1, '1.00', '0.00'),
-(18, 11, 12, 1, '0.50', '0.00'),
-(19, 12, 12, 1, '0.25', '0.00'),
-(20, 13, 12, 1, '0.50', '0.00'),
-(21, 14, 12, 1, '0.25', '0.00'),
-(22, 15, 13, 1, '1.00', '0.00'),
-(23, 16, 13, 1, '1.00', '0.00'),
-(24, 17, 13, 1, '1.00', '0.00'),
-(25, 18, 13, 1, '1.00', '0.00'),
-(26, 19, 13, 1, '0.50', '0.00'),
-(27, 20, 14, 1, '1.00', '0.00'),
-(28, 21, 14, 1, '1.00', '0.00'),
-(29, 22, 14, 1, '1.00', '0.00'),
-(30, 23, 14, 1, '0.75', '0.00'),
-(31, 24, 14, 1, '0.75', '0.00'),
-(32, 25, 15, 1, '0.50', '0.75'),
-(33, 26, 15, 1, '0.75', '0.25'),
-(34, 27, 16, 1, '1.00', '0.75'),
-(35, 28, 16, 1, '1.00', '0.25'),
-(36, 29, 17, 1, '0.50', '0.50'),
-(37, 30, 17, 1, '0.50', '0.50'),
-(38, 31, 18, 1, '0.50', '0.50'),
-(39, 32, 18, 1, '1.00', '0.50'),
-(40, 1, 19, 3, '1.00', '0.00'),
-(41, 2, 19, 3, '0.50', '0.00'),
-(42, 3, 19, 3, '1.00', '0.00'),
-(43, 4, 19, 3, '1.00', '0.00'),
-(44, 5, 19, 3, '0.75', '0.00'),
-(45, 6, 20, 3, '0.75', '0.00'),
-(46, 7, 20, 3, '1.00', '0.00'),
-(47, 8, 20, 3, '1.00', '0.00'),
-(48, 9, 20, 3, '1.00', '0.00'),
-(49, 10, 21, 3, '1.00', '0.00'),
-(50, 11, 21, 3, '0.50', '0.00'),
-(51, 12, 21, 3, '0.25', '0.00'),
-(52, 13, 21, 3, '0.50', '0.00'),
-(53, 14, 21, 3, '0.25', '0.00'),
-(54, 15, 22, 3, '1.00', '0.00'),
-(55, 16, 22, 3, '1.00', '0.00'),
-(56, 17, 22, 3, '1.00', '0.00'),
-(57, 18, 22, 3, '1.00', '0.00'),
-(58, 19, 22, 3, '0.50', '0.00'),
-(59, 20, 23, 3, '1.00', '0.00'),
-(60, 21, 23, 3, '1.00', '0.00'),
-(61, 22, 23, 3, '1.00', '0.00'),
-(62, 23, 23, 3, '0.75', '0.00'),
-(63, 24, 23, 3, '0.75', '0.00'),
-(64, 25, 24, 3, '0.50', '0.75'),
-(65, 26, 24, 3, '0.75', '0.25'),
-(66, 27, 25, 3, '1.00', '0.75'),
-(67, 28, 25, 3, '1.00', '0.25'),
-(68, 29, 26, 3, '0.50', '0.50'),
-(69, 30, 26, 3, '0.50', '0.50'),
-(70, 31, 27, 3, '0.50', '0.50'),
-(71, 32, 27, 3, '1.00', '0.50');
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `period`
---
-
-CREATE TABLE IF NOT EXISTS `period` (
-  `idperiod` int(11) NOT NULL AUTO_INCREMENT,
-  `description` varchar(125) NOT NULL,
-  `period_processed` int(11) NOT NULL,
-  PRIMARY KEY (`idperiod`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
-
---
--- Volcado de datos para la tabla `period`
---
-
-INSERT INTO `period` (`idperiod`, `description`, `period_processed`) VALUES
-(1, '2012', 1),
-(3, '2015', 1);
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `period_criteria`
---
-
-CREATE TABLE IF NOT EXISTS `period_criteria` (
-  `idpc` int(11) NOT NULL AUTO_INCREMENT,
-  `criteria` int(11) NOT NULL,
-  `period` int(11) NOT NULL,
-  `point_efqm` decimal(5,2) NOT NULL,
-  PRIMARY KEY (`idpc`,`period`),
-  KEY `fk_period_criteria_criteria1_idx` (`criteria`),
-  KEY `fk_period_criteria_period1_idx` (`period`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=28 ;
-
---
--- Volcado de datos para la tabla `period_criteria`
---
-
-INSERT INTO `period_criteria` (`idpc`, `criteria`, `period`, `point_efqm`) VALUES
-(10, 1, 1, '100.00'),
-(11, 2, 1, '100.00'),
-(12, 3, 1, '100.00'),
-(13, 4, 1, '100.00'),
-(14, 5, 1, '100.00'),
-(15, 6, 1, '150.00'),
-(16, 7, 1, '100.00'),
-(17, 8, 1, '100.00'),
-(18, 9, 1, '150.00'),
-(19, 1, 3, '100.00'),
-(20, 2, 3, '100.00'),
-(21, 3, 3, '100.00'),
-(22, 4, 3, '100.00'),
-(23, 5, 3, '100.00'),
-(24, 6, 3, '150.00'),
-(25, 7, 3, '100.00'),
-(26, 8, 3, '100.00'),
-(27, 9, 3, '150.00');
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `priority`
---
-
-CREATE TABLE IF NOT EXISTS `priority` (
-  `idpriority` int(11) NOT NULL AUTO_INCREMENT,
-  `description` varchar(200) NOT NULL,
-  PRIMARY KEY (`idpriority`),
-  UNIQUE KEY `idpriority_UNIQUE` (`idpriority`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
-
---
--- Volcado de datos para la tabla `priority`
---
-
-INSERT INTO `priority` (`idpriority`, `description`) VALUES
-(1, 'Baja'),
-(2, 'Media'),
-(3, 'Alta');
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `process`
---
-
-CREATE TABLE IF NOT EXISTS `process` (
-  `idprocess` int(11) NOT NULL AUTO_INCREMENT,
-  `description` varchar(150) NOT NULL,
-  PRIMARY KEY (`idprocess`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=8 ;
-
---
--- Volcado de datos para la tabla `process`
---
-
-INSERT INTO `process` (`idprocess`, `description`) VALUES
-(1, 'P1'),
-(2, 'P2'),
-(3, 'P3'),
-(4, 'P4'),
-(5, 'P5'),
-(6, 'P6'),
-(7, 'P7');
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `questions`
---
-
-CREATE TABLE IF NOT EXISTS `questions` (
-  `idquestions` int(11) NOT NULL AUTO_INCREMENT,
-  `question` text NOT NULL,
-  PRIMARY KEY (`idquestions`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=239 ;
-
---
--- Volcado de datos para la tabla `questions`
---
-
-INSERT INTO `questions` (`idquestions`, `question`) VALUES
-(12, '¿Han sido definidos por parte del Equipo Directivo la Misión, la Visión, los Principios Éticos y Valores que conforman la "Cultura" de la Universidad, y han sido convenientemente divulgados a todos los Grupos de Interés (profesores, alumnos, Personal de Administración y Servicios (PAS), Consejo Social, etc.)?'),
-(13, '¿Incluyen dichos valores conceptos tales como calidad y aprendizaje? '),
-(14, 'El comportamiento del Equipo Directivo ¿es coherente con dichos valores?'),
-(15, '¿Impulsa la Gerencia el desarrollo e implantación de un Sistema de Gestión por Procesos que permita traducir la Estrategia/Presupuesto a objetivos cuantificables que, medidos de forma periódica, sirvan para mejorar los resultados globales?'),
-(16, '¿Se relaciona el Equipo Directivo con los profesores, alumnos, socios y representantes de la sociedad para conocer sus necesidades y expectativas?'),
-(17, '¿Se implican y apoyan actividades de mejora, protección medioambiental o de contribución a la sociedad?'),
-(18, '¿Mantiene el Equipo Directivo una comunicación fluida y bidireccional con sus empleados?'),
-(19, '¿Aprovechan dicha comunicación para transmitir los Valores y las Estrategias de la Universidad? '),
-(20, '¿Escuchan las aportaciones y/o quejas de sus empleados?'),
-(21, '¿Apoya el Equipo Directivo a sus empleados y les ayudan si es necesario para conseguir sus objetivos? '),
-(22, '¿Les animan y facilitan la participación en equipos/actividades de mejora? '),
-(23, '¿Reconocen adecuadamente a individuos o equipos por su contribución a dichas actividades?'),
-(24, '¿Define e impulsa el Equipo Directivo los cambios necesarios para adecuar la Universidad? '),
-(25, '¿Garantizan la inversión, los recursos y el apoyo necesarios para desarrollar dichos cambios? '),
-(26, '¿Una vez producidos los cambios, se mide la eficacia de los mismos y se comunican a los Grupos de Interés?'),
-(27, 'En la definición del Plan Operativo/Presupuesto Anual de la Unidad Organizativa, ¿se recogen y consideran las Necesidades y Expectativas de los diferentes Grupos de Interés (empleados de la propia Unidad, estudiantes, potenciales estudiantes, PDI, PAS, centros, departamentos, órganos de gobierno, Admones. Públicas e instituciones conveniadas), así como datos sobre el comportamiento del sistema universitario y unidades similares?'),
-(28, 'En la definición del Plan Operativo/Presupuesto Anual de la Unidad Organizativa, ¿se recogen y consideran los resultados de las mediciones anteriores, tanto propios como de unidades similares, y se analizan los impactos de la legislación aplicable, la innovación tecnológica, y los indicadores socioeconómicos y demográficos a corto y largo plazo?'),
-(29, 'En la definición del Plan Operativo/Presupuesto Anual de la Unidad Organizativa, ¿se tienen en cuenta: Coherencia con los Principios Éticos y Valores que conforman su "Cultura"?'),
-(30, 'En la definición del Plan Operativo/Presupuesto Anual de la Unidad Organizativa, ¿se tienen en cuenta: Atención equilibrada de necesidades y expectativas de los Grupos de Interés.?'),
-(31, 'En la definición del Plan Operativo/Presupuesto Anual de la Unidad Organizativa, ¿se tienen en cuenta: Análisis de Riesgos y Plazos e identificación de los Factores Críticos de Éxito?'),
-(32, '¿Se identifican los Procesos Clave de la Unidad Organizativa y se despliega el Plan Operativo a través de ellos? '),
-(33, '¿Se descomponen los Objetivos y Metas de la Unidad Organizativa a través de los distintos niveles, llegando hasta la definición y seguimiento de los objetivos individuales o de equipo?'),
-(34, '¿Se evalúa el nivel de conocimiento y sensibilización de los Grupos de Interés sobre los aspectos fundamentales de la Estrategia, Plan Operativo y Presupuesto, según sea apropiado?'),
-(35, '¿Existe un Plan específico de Personal de Administración y Servicios, respetuoso con la legislación vigente y la igualdad de oportunidades, alineado con la Estrategia y el Plan Operativo de la Universidad, y se revisa conjuntamente con ellos? '),
-(36, '¿Se tienen en cuenta las opiniones del Personal de Administración y Servicios en la definición de dicho Plan?'),
-(37, '¿Se preocupa el Equipo Directivo del desarrollo personal y profesional del Personal de Administración y Servicios, procurando la adecuación de sus conocimientos y experiencia a las necesidades derivadas de su responsabilidad? '),
-(38, '¿Se desarrollan e implantan planes de formación que faciliten dicha adecuación? '),
-(39, '¿Se asigna al Personal de Administración y Servicios objetivos individuales y de equipo, y se evalúa su rendimiento?'),
-(40, '¿Estimula el Equipo Directivo la implicación del PAS hacia la consecución de sus objetivos, mediante la motivación y el reconocimiento? '),
-(41, '¿Promueve y facilita el Equipo Directivo la participación del PAS en acciones de mejora?'),
-(42, '¿Impulsa y motiva al PAS hacia la innovación y la creatividad, siendo receptiva a sus aportaciones y sugerencias de mejora?'),
-(43, '¿Se preocupa el Equipo Directivo de establecer una buena comunicación con/entre sus empleados?'),
-(44, '¿Se han desarrollado cauces de comunicación verticales y horizontales y se utilizan eficientemente? '),
-(45, '¿Se aprovechan dichos canales de comunicación para difundir el conocimiento y las buenas prácticas?'),
-(46, '¿Se asegura el Equipo directivo del alineamiento de sus políticas de remuneración, movilidad, etc., con el Plan Operativo y Presupuesto? '),
-(47, '¿Existe una política de reconocimiento hacia el PAS y fomento de la concienciación en temas medioambientales y de seguridad e higiene? '),
-(48, '¿Se proporciona al PAS unas instalaciones y servicios de alta calidad? '),
-(49, '¿Existe sensibilidad ante necesidades personales/clientes?'),
-(50, '¿Identifica la Unidad Organizativa aquellas Organizaciones clave con las que se relaciona (Universidades, administraciones públicas, proveedores, etc.)?'),
-(51, '¿Desarrolla con ellas acuerdos de colaboración, fomentando la transferencia de conocimientos y el aprovechamiento de sinergias?'),
-(52, '¿Se ha definido e implantado una estrategia económico-financiera, alineada con la Estrategia/Plan Operativo de la Unidad Organizativa y traducida en un Presupuesto Anual? '),
-(53, '¿Contempla dicha estrategia tanto las inversiones previstas, como los recursos necesarios para la financiación de las actividades de la Unidad Organizativa?'),
-(54, '¿Contempla una adecuada gestión del riesgo financiero, gestión de cobros (cuando proceda), etc.?'),
-(55, '¿Se asegura la Unidad Organizativa del adecuado funcionamiento, conservación y seguridad de sus edificios e instalaciones? '),
-(56, '¿Se optimizan recursos, inventarios y se reducen consumos de suministros y energías (principalmente, los no renovables)? '),
-(57, '¿Se cuidan adecuadamente los aspectos medioambientales y de reciclado de residuos?'),
-(58, '¿Identifica la Unidad Organizativa las tecnologías e instalaciones más adecuadas para cubrir sus necesidades y las de sus clientes? '),
-(59, '¿Gestiona adecuadamente las tecnologías existentes y se preocupa de su actualización y renovación?'),
-(60, '¿Recoge y gestiona adecuadamente la Unidad Organizativa toda la información pertinente para el cumplimiento de sus fines? '),
-(61, '¿Facilita a sus Grupos de Interés el acceso a las informaciones que son de su interés?'),
-(62, '¿Protege adecuadamente la información sensible, tanto para la gestión como para las personas?'),
-(63, '¿La Facultad dispone y aplica una metodología de procesos orientada a la identificación, diseño y documentación de sus Procesos Clave, que son aquéllos considerados imprescindibles para desplegar y desarrollar la Estrategia y Plan Operativo? '),
-(64, '¿Dicha metodología de procesos se corresponde con alguna estandarización del tipo ISO 9000 propia de la Universidad o similar?'),
-(65, '¿Disponen los Procesos, y en especial los denominados Clave, de unos sistemas de medición o indicadores, que permitan establecer sus objetivos de rendimiento y evaluar los resultados obtenidos? '),
-(66, '¿Se han identificado aquellas áreas de los procesos que son comunes con otras unidades y a agentes externos a éste (proveedores, administración, etc.)?'),
-(67, '¿Se revisa regularmente la eficiencia de los Procesos y se modifican apropiadamente en función de dichas revisiones, así como en función de las informaciones procedentes de sugerencias de mejora, actividades de aprendizaje, propuestas de innovación, etc.? '),
-(68, 'La implantación de los cambios en los Procesos, ¿se realiza mediante un análisis previo (piloto) y una adecuada comunicación/formación a todos los implicados?'),
-(69, '¿Se recogen informaciones procedentes de estudios de mercado y competencia, necesidades y expectativas de clientes, sugerencias innovadoras y creativas..., ?'),
-(70, '¿se tiene en cuenta esta informacion a la hora de definir los nuevos Productos, Servicios y actividades de la Unidad organizativa?'),
-(71, '¿Se investigan las necesidades y expectativas, así como el grado de satisfacción de los clientes con los Productos y Servicios, y se utiliza dicha información para la modificación y mejora de los mismos?'),
-(72, '¿Se asegura la Unidad organizativa de que las características y prestaciones de los Productos y Servicios que proporciona a sus clientes responden a las especificaciones de su diseño? '),
-(73, '¿Comunica veraz y adecuadamente la Unidad organizativa las condiciones de prestación de sus Productos y Servicios a sus potenciales clientes? '),
-(74, '¿Establece niveles de compromiso y es consecuente con los mismos?'),
-(75, '¿Desarrolla la Unidad organizativa actividades encaminadas a identificar necesidades y expectativas de sus clientes? '),
-(76, '¿Dispone la Unidad organizativa de cauces de comunicación para la recepción de quejas y reclamaciones de sus clientes? '),
-(77, '¿Tramita las mismas de forma sistemática y utiliza dicha información para la mejora permanente de sus servicios?'),
-(78, '¿Identifica la Universidad cuáles son los aspectos más significativos y que más aprecian sus clientes? '),
-(79, '¿El método que se utiliza para identificar dichos aspectos es fiable, se revisa de forma periódica y permite segmentar los resultados en función de los diferentes grupos de clientes?'),
-(80, '¿Obtiene periódicamente los Servicios de la Universidad información directa del grado de satisfacción de los diferentes grupos de clientes respecto a dichos aspectos más significativos, así como de los servicios recibidos, y el nivel de satisfacción global?'),
-(81, 'Sobre los indicadores del grado de satisfacción de clientes, ¿se marcan objetivos y se miden los resultados obtenidos? '),
-(82, '¿La tendencia de dichos indicadores es positiva? '),
-(83, 'Si en alguno no lo fuera, ¿se han averiguado las causas y establecido las acciones de mejora adecuadas?'),
-(84, '¿Se comparan los índices de satisfacción de clientes con los de los Servicios en otras Universidades? '),
-(85, 'Respecto a dichos indicadores, ¿en qué situación competitiva situamos a la Universidad?'),
-(86, 'Teniendo en cuenta cuáles son los aspectos más valorados por los clientes, ¿ha identificado la Universidad con qué procesos están relacionados y con qué indicadores de dichos procesos puede existir una correspondencia?'),
-(87, 'Sobre los indicadores de dichos procesos, que inciden directamente en la satisfacción de los clientes, ¿se marcan objetivos y se miden los resultados obtenidos? '),
-(88, '¿La tendencia de dichos indicadores es positiva? '),
-(89, 'Si en alguno no lo fuera, ¿se han averiguado las causas y establecido las acciones de mejora adecuadas?'),
-(90, '¿Se comparan los resultados de dichos indicadores con los de otras Universidades o el propio sector? '),
-(91, 'Respecto a dichos indicadores, ¿en qué situación competitiva situamos a los Servicios de la Universidad?'),
-(92, '¿Obtiene periódicamente la Facultad información directa del grado de satisfacción de los diferentes grupos de empleados respecto a aquellos aspectos que les son más significativos, así como del nivel de satisfacción global?'),
-(93, 'Sobre los indicadores del grado de satisfacción de los empleados, ¿se marcan objetivos y se miden los resultados obtenidos? '),
-(94, '¿La tendencia de dichos indicadores es positiva? '),
-(95, 'Si en alguno no lo fuera, ¿se han averiguado las causas y establecido las acciones de mejora adecuadas?'),
-(96, '¿Se comparan los índices de satisfacción de los empleados con los de otras Unidades o Universidades? '),
-(97, 'Respecto a dichos indicadores, ¿en qué situación competitiva situamos a la Unidad Organizativa?'),
-(98, '¿Ha identificado la Facultad con qué procesos están relacionados los índices de satisfacción de los empleados, y con qué indicadores de dichos procesos puede existir una correspondencia?'),
-(99, 'Sobre los indicadores de dichos procesos, que inciden directamente en la satisfacción de los empleados, ¿se marcan objetivos y se miden los resultados obtenidos? '),
-(100, '¿La tendencia de dichos indicadores es positiva? '),
-(101, 'Si en alguno no lo fuera, ¿se han averiguado las causas y establecido las acciones de mejora adecuadas?'),
-(102, '¿Se comparan los resultados de dichos indicadores con los de otras unidades de la propia Universidad y/o Universidades? '),
-(103, 'Respecto a dichos indicadores, ¿en qué situación situamos a la Unidad Organizativa?'),
-(104, '¿Identifica y mide la Unidad Organizativa el nivel de percepción que tiene la Sociedad respecto a aquellos aspectos de especial sensibilidad social en su esfera de influencia? '),
-(105, '¿La tendencia de dichos indicadores es positiva? '),
-(106, 'Si en alguno no lo fuera, ¿se han averiguado las causas y establecido las acciones de mejora adecuadas?'),
-(107, '¿Ha identificado la Unidad Organizativa con qué procesos están relacionados los índices de percepción social, y con qué indicadores de dichos procesos puede existir una correspondencia? '),
-(108, '¿Se marcan objetivos sobre dichos indicadores y se miden los resultados obtenidos? '),
-(109, '¿La tendencia de dichos indicadores es positiva? '),
-(110, 'Si en alguno no lo fuera, ¿se han averiguado las causas y establecido las acciones de mejora adecuadas?'),
-(111, '¿Se comparan los índices de percepción social de la Unidad Organizativa con los de otras Unidades de la propia Universidad o con Unidades Organizativas similares y de Universidades líderes? '),
-(112, 'Respecto a dichos indicadores, ¿en qué situación competitiva situamos a la Unidad Organizativa?'),
-(113, '¿Define objetivos y mide la Unidad Organizativa de forma periódica y sistemática sus Resultados Clave, y especialmente los económico-financieros?'),
-(114, '¿Los objetivos son cada vez más exigentes y los resultados muestran una tendencia positiva? '),
-(115, 'Si alguno de los Resultados Clave no reflejara una tendencia positiva, ¿se han averiguado las causas y establecido las acciones de mejora adecuadas?'),
-(116, '¿Se comparan los Resultados Clave con los de otras unidades organizativas o  universidades? '),
-(117, 'Respecto a dichos indicadores de Resultados Clave, ¿en qué situación competitiva situamos a la Unidad Organizativa?'),
-(118, 'Además de dichos Resultados Clave, ¿define objetivos y mide la Facultadde forma periódica y sistemática otros resultados correspondientes a procesos de soporte, que contribuyen de manera sustancial a la consecución de los anteriores?'),
-(119, 'Los objetivos de dichos indicadores correspondientes a procesos de soporte, ¿son cada vez más exigentes y los resultados muestran una tendencia positiva?'),
-(120, 'Si alguno de los resultados no reflejara una tendencia positiva, ¿se han averiguado las causas y establecido las acciones de mejora adecuadas?'),
-(121, '¿Se comparan los resultados de los indicadores de procesos de soporte con los de otras Unidades Organizativas o Universidades? '),
-(122, 'Respecto a dichos indicadores, ¿en qué situación competitiva situamos a la Unidad Organizativa?');
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `responses_people`
---
-
-CREATE TABLE IF NOT EXISTS `responses_people` (
-  `idresppeo` int(11) NOT NULL AUTO_INCREMENT,
-  `hash` varchar(45) NOT NULL,
-  `pcsp_questions` int(11) NOT NULL,
-  `pcs_process` int(11) NOT NULL,
-  `pc_subcriteria` int(11) NOT NULL,
-  `period_criteria` int(11) NOT NULL,
-  `period` int(11) NOT NULL,
-  `type_answer` int(11) NOT NULL,
-  PRIMARY KEY (`idresppeo`),
-  KEY `fk_responses_people_pcsp_questions1_idx` (`pcsp_questions`,`pcs_process`,`pc_subcriteria`,`period_criteria`,`period`),
-  KEY `fk_responses_people_type_answer1_idx` (`type_answer`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1888 ;
-
---
--- Volcado de datos para la tabla `responses_people`
---
 
 INSERT INTO `responses_people` (`idresppeo`, `hash`, `pcsp_questions`, `pcs_process`, `pc_subcriteria`, `period_criteria`, `period`, `type_answer`) VALUES
 (112, 'd12862b5-e5a8-424e-abd4-dda410b247f0', 10, 8, 8, 10, 1, 4),
@@ -3745,200 +3899,6 @@ INSERT INTO `responses_people` (`idresppeo`, `hash`, `pcsp_questions`, `pcs_proc
 (1886, 'b01b1152-d18a-416a-bdea-5cd554fbd64e', 230, 107, 71, 27, 3, 6),
 (1887, 'b01b1152-d18a-416a-bdea-5cd554fbd64e', 231, 107, 71, 27, 3, 6);
 
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `status`
---
-
-CREATE TABLE IF NOT EXISTS `status` (
-  `idstatus` int(11) NOT NULL AUTO_INCREMENT,
-  `description` varchar(200) NOT NULL,
-  PRIMARY KEY (`idstatus`),
-  UNIQUE KEY `idstatus_UNIQUE` (`idstatus`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
-
---
--- Volcado de datos para la tabla `status`
---
-
-INSERT INTO `status` (`idstatus`, `description`) VALUES
-(1, 'Sin tratar'),
-(2, 'En progreso'),
-(3, 'Finalizado');
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `subcriteria`
---
-
-CREATE TABLE IF NOT EXISTS `subcriteria` (
-  `idsubcriteria` int(11) NOT NULL AUTO_INCREMENT,
-  `description` varchar(150) NOT NULL,
-  PRIMARY KEY (`idsubcriteria`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=33 ;
-
---
--- Volcado de datos para la tabla `subcriteria`
---
-
-INSERT INTO `subcriteria` (`idsubcriteria`, `description`) VALUES
-(1, '1a'),
-(2, '1b'),
-(3, '1c'),
-(4, '1d'),
-(5, '1e'),
-(6, '2a'),
-(7, '2b'),
-(8, '2c'),
-(9, '2d'),
-(10, '3a'),
-(11, '3b'),
-(12, '3c'),
-(13, '3d'),
-(14, '3e'),
-(15, '4a'),
-(16, '4b'),
-(17, '4c'),
-(18, '4d'),
-(19, '4e'),
-(20, '5a'),
-(21, '5b'),
-(22, '5c'),
-(23, '5d'),
-(24, '5e'),
-(25, '6a'),
-(26, '6b'),
-(27, '7a'),
-(28, '7b'),
-(29, '8a'),
-(30, '8b'),
-(31, '9a'),
-(32, '9b');
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `type`
---
-
-CREATE TABLE IF NOT EXISTS `type` (
-  `idtype` int(11) NOT NULL AUTO_INCREMENT,
-  `description` varchar(150) DEFAULT NULL,
-  PRIMARY KEY (`idtype`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
-
---
--- Volcado de datos para la tabla `type`
---
-
-INSERT INTO `type` (`idtype`, `description`) VALUES
-(1, 'Group 1'),
-(2, 'Group 2'),
-(3, 'Group 3');
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `type_answer`
---
-
-CREATE TABLE IF NOT EXISTS `type_answer` (
-  `idta` int(11) NOT NULL AUTO_INCREMENT,
-  `type` int(11) NOT NULL,
-  `answer` int(11) NOT NULL,
-  `value` decimal(5,2) NOT NULL,
-  PRIMARY KEY (`idta`),
-  KEY `fk_type_answer_type1_idx` (`type`),
-  KEY `fk_type_answer_answer1_idx` (`answer`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=16 ;
-
---
--- Volcado de datos para la tabla `type_answer`
---
-
-INSERT INTO `type_answer` (`idta`, `type`, `answer`, `value`) VALUES
-(1, 1, 1, '0.00'),
-(2, 1, 2, '25.00'),
-(3, 1, 3, '50.00'),
-(4, 1, 4, '75.00'),
-(5, 1, 5, '100.00'),
-(6, 2, 1, '0.00'),
-(7, 2, 2, '37.00'),
-(8, 2, 3, '75.00'),
-(9, 2, 4, '112.00'),
-(10, 2, 5, '150.00'),
-(11, 3, 1, '0.00'),
-(12, 3, 2, '22.00'),
-(13, 3, 3, '45.00'),
-(14, 3, 4, '67.00'),
-(15, 3, 5, '90.00');
-
---
--- Restricciones para tablas volcadas
---
-
---
--- Filtros para la tabla `average_criteria`
---
-ALTER TABLE `average_criteria`
-  ADD CONSTRAINT `fk_average_criteria_poll_criteria1` FOREIGN KEY (`period_criteria`, `period`) REFERENCES `period_criteria` (`idpc`, `period`) ON DELETE NO ACTION ON UPDATE NO ACTION;
-
---
--- Filtros para la tabla `average_process`
---
-ALTER TABLE `average_process`
-  ADD CONSTRAINT `fk_average_process_pcs_process1` FOREIGN KEY (`pcs_process`, `pc_subcriteria`, `period_criteria`, `period`) REFERENCES `pcs_process` (`idpcsp`, `pc_subcriteria`, `period_criteria`, `period`) ON DELETE NO ACTION ON UPDATE NO ACTION;
-
---
--- Filtros para la tabla `average_responses`
---
-ALTER TABLE `average_responses`
-  ADD CONSTRAINT `fk_average_responses_poll1` FOREIGN KEY (`period`) REFERENCES `period` (`idperiod`) ON DELETE NO ACTION ON UPDATE NO ACTION;
-
---
--- Filtros para la tabla `average_subcriteria`
---
-ALTER TABLE `average_subcriteria`
-  ADD CONSTRAINT `fk_average_subcriteria_pc_subcriteria1` FOREIGN KEY (`pc_subcriteria`, `period_criteria`, `period`) REFERENCES `pc_subcriteria` (`idpcs`, `period_criteria`, `period`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
--- Filtros para la tabla `improvements`
---
-ALTER TABLE `improvements`
-  ADD CONSTRAINT `fk_improvements_period1` FOREIGN KEY (`period`) REFERENCES `period` (`idperiod`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_improvements_priority1` FOREIGN KEY (`priority`) REFERENCES `priority` (`idpriority`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_improvements_status1` FOREIGN KEY (`status`) REFERENCES `status` (`idstatus`) ON DELETE NO ACTION ON UPDATE NO ACTION;
-
---
--- Filtros para la tabla `pcsp_questions`
---
-ALTER TABLE `pcsp_questions`
-  ADD CONSTRAINT `fk_pcsp_questions_pcs_process1` FOREIGN KEY (`pcs_process`, `pc_subcriteria`, `period_criteria`, `period`) REFERENCES `pcs_process` (`idpcsp`, `pc_subcriteria`, `period_criteria`, `period`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_pcsp_questions_questions1` FOREIGN KEY (`questions_idquestions`) REFERENCES `questions` (`idquestions`) ON DELETE NO ACTION ON UPDATE NO ACTION;
-
---
--- Filtros para la tabla `pcs_process`
---
-ALTER TABLE `pcs_process`
-  ADD CONSTRAINT `fk_pcs_process_pc_subcriteria1` FOREIGN KEY (`pc_subcriteria`, `period_criteria`, `period`) REFERENCES `pc_subcriteria` (`idpcs`, `period_criteria`, `period`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_pcs_process_process1` FOREIGN KEY (`process`) REFERENCES `process` (`idprocess`) ON DELETE NO ACTION ON UPDATE NO ACTION;
-
---
--- Filtros para la tabla `pc_subcriteria`
---
-ALTER TABLE `pc_subcriteria`
-  ADD CONSTRAINT `fk_pc_subcriteria_period_criteria1` FOREIGN KEY (`period_criteria`, `period`) REFERENCES `period_criteria` (`idpc`, `period`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_pc_subcriteria_subcriteria1` FOREIGN KEY (`subcriteria`) REFERENCES `subcriteria` (`idsubcriteria`) ON DELETE NO ACTION ON UPDATE NO ACTION;
-
---
--- Filtros para la tabla `period_criteria`
---
-ALTER TABLE `period_criteria`
-  ADD CONSTRAINT `fk_period_criteria_criteria1` FOREIGN KEY (`criteria`) REFERENCES `criteria` (`idcriteria`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_period_criteria_period1` FOREIGN KEY (`period`) REFERENCES `period` (`idperiod`) ON DELETE NO ACTION ON UPDATE NO ACTION;
-
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+SET SQL_MODE=@OLD_SQL_MODE;
+SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
+SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;

@@ -5,6 +5,7 @@
  */
 package controller;
 
+import db.ConnectionFactory;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -77,7 +78,7 @@ public class ControllerSelected {
                             view.setVisible(false);
                             Connection conn;
                             Class.forName("com.mysql.jdbc.Driver");
-                            conn = DriverManager.getConnection("jdbc:mysql://localhost/sgc_efqm", "sgc", "sgc");
+                            conn = ConnectionFactory.getDatabaseConnection();
                             JasperReport report = (JasperReport) JRLoader.loadObject("efqm.jasper");
                             Map parameters = new HashMap();
                             parameters.put("Period", idPeriod);

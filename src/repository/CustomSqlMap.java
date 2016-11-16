@@ -24,7 +24,12 @@ public class CustomSqlMap {
     
     private CustomSqlMap() {
         try {
-            reader = Resources.getResourceAsReader("config/ibatis-config.xml");
+            String env = System.getProperty("env");
+            if(env != null){
+                reader = Resources.getResourceAsReader("config/ibatis-config-production.xml");
+            } else {
+                reader = Resources.getResourceAsReader("config/ibatis-config.xml");
+            }
             sqlMapClient = SqlMapClientBuilder.buildSqlMapClient(reader);
         } catch (IOException ex) {
             Logger.getLogger(CustomSqlMap.class.getName()).log(Level.SEVERE, null, ex);

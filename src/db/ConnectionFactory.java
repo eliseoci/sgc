@@ -26,18 +26,26 @@ public class ConnectionFactory {
     private final DataSource dataSource;
 
     private ConnectionFactory() {
-  Properties properties = new Properties();
-    properties.setProperty("user", "sgc");
-    properties.setProperty("password", "sgc");
+        String env = System.getProperty("env");
+        Properties properties = new Properties();
+        GenericObjectPool pool = new GenericObjectPool();
+        String DB_URI = "jdbc:mysql://localhost/sgc_efqm";
+        System.out.println("Enviroment: " + env);
+        if(env != null){
+            DB_URI = "jdbc:mysql://c109a5c2-d016-4d93-bc7c-a6be01867c08.mysql.sequelizer.com/dbc109a5c2d0164d93bc7ca6be01867c08";
+            properties.setProperty("user", "chyjcmdniuotzvoo");
+            properties.setProperty("password", "nWZ82JFsW8NNRuBHuTrZK4UdckFDxGkbh2zC2wXDSMHhXCW8t7AjHR6rcV6Qdb3o");
+        } else {
+            properties.setProperty("user", "sgc");
+            properties.setProperty("password", "sgc");
+        }
+        DriverManagerConnectionFactory connectionFactory = new DriverManagerConnectionFactory(
+          DB_URI, properties);
+        new PoolableConnectionFactory(connectionFactory, pool, null,
+          "SELECT 1", 3, false, false,
+          Connection.TRANSACTION_READ_COMMITTED);
 
-    GenericObjectPool pool = new GenericObjectPool();
-    DriverManagerConnectionFactory connectionFactory = new DriverManagerConnectionFactory(
-      "jdbc:mysql://localhost/sgc_efqm", properties);
-    new PoolableConnectionFactory(connectionFactory, pool, null,
-      "SELECT 1", 3, false, false,
-      Connection.TRANSACTION_READ_COMMITTED);
-
-    this.dataSource = new PoolingDataSource(pool);
+        this.dataSource = new PoolingDataSource(pool);
     }
 
     public static Connection getDatabaseConnection() throws SQLException {

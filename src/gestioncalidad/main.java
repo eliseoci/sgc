@@ -6,14 +6,16 @@
 
 package gestioncalidad;
 
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;
+import db.ConnectionFactory;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import de.javasoft.plaf.synthetica.SyntheticaBlackEyeLookAndFeel;
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import static java.lang.System.exit;
+import java.sql.SQLException;
 import java.text.ParseException;
+import javax.swing.JOptionPane;
 import view.LoginForm;
 
 /**
@@ -28,6 +30,13 @@ public class main {
      */
     public static void main(String[] args) throws ParseException {
         try {
+            try {
+                ConnectionFactory.getDatabaseConnection();
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(null, "No se pudo conectar con la BD.", "Error", JOptionPane.ERROR_MESSAGE);
+                System.out.println("SQLException: " + ex);
+                exit(1);
+            }
             UIManager.setLookAndFeel(new SyntheticaBlackEyeLookAndFeel());
             LoginForm windowMain = new LoginForm();
             Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
