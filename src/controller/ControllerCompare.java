@@ -31,7 +31,7 @@ public class ControllerCompare {
     
     public void getAllPeriod(ComparePeriods view) {
         try {
-            List<Period> periods = repositoryPeriod.getAll();
+            List<Period> periods = repositoryPeriod.getAllPeriodsProcessed();
             for (Period period : periods) {
                 view.getCbSelectPeriod().addItem(period);
                 view.getCbSelectPeriod1().addItem(period);
