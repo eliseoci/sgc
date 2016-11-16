@@ -3,27 +3,19 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Cohen/Dropbox/4to/SG%20de%20Calidad/Sistema%20EFQM/gestioncalidad/src/controller/ControllerQuestion.java</file>
-            <file>file:/C:/Users/Cohen/Dropbox/4to/SG%20de%20Calidad/Sistema%20EFQM/gestioncalidad/src/view/criterias/ListCriteria.java</file>
-            <file>file:/C:/Users/Cohen/Dropbox/4to/SG%20de%20Calidad/Sistema%20EFQM/gestioncalidad/src/controller/ControllerProcess.java</file>
-            <file>file:/C:/Users/Cohen/Dropbox/4to/SG%20de%20Calidad/Sistema%20EFQM/gestioncalidad/src/view/LoginForm.java</file>
-            <file>file:/C:/Users/Cohen/Dropbox/4to/SG%20de%20Calidad/Sistema%20EFQM/gestioncalidad/src/controller/ControllerSubCriteria.java</file>
+            <file>file:/C:/Users/Cohen/Dropbox/4to/SG%20de%20Calidad/Sistema%20EFQM/gestioncalidad/src/view/WindowMain.java</file>
+            <file>file:/C:/Users/Cohen/Dropbox/4to/SG%20de%20Calidad/Sistema%20EFQM/gestioncalidad/src/config/AverageResponses.xml</file>
             <file>file:/C:/Users/Cohen/Dropbox/4to/SG%20de%20Calidad/Sistema%20EFQM/gestioncalidad/src/repository/RepositoryPeriod.java</file>
-            <file>file:/C:/Users/Cohen/Dropbox/4to/SG%20de%20Calidad/Sistema%20EFQM/gestioncalidad/src/repository/CustomSqlMap.java</file>
-            <file>file:/C:/Users/Cohen/Dropbox/4to/SG%20de%20Calidad/Sistema%20EFQM/gestioncalidad/src/view/period/ListPeriod.java</file>
+            <file>file:/C:/Users/Cohen/Dropbox/4to/SG%20de%20Calidad/Sistema%20EFQM/gestioncalidad/src/config/Response.xml</file>
+            <file>file:/C:/Users/Cohen/Dropbox/4to/SG%20de%20Calidad/Sistema%20EFQM/gestioncalidad/src/model/AverageByResponses.java</file>
+            <file>file:/C:/Users/Cohen/Dropbox/4to/SG%20de%20Calidad/Sistema%20EFQM/gestioncalidad/src/config/Period.xml</file>
+            <file>file:/C:/Users/Cohen/Dropbox/4to/SG%20de%20Calidad/Sistema%20EFQM/gestioncalidad/src/repository/RepositoryAverage.java</file>
             <file>file:/C:/Users/Cohen/Dropbox/4to/SG%20de%20Calidad/Sistema%20EFQM/gestioncalidad/src/controller/ControllerSelected.java</file>
-            <file>file:/C:/Users/Cohen/Dropbox/4to/SG%20de%20Calidad/Sistema%20EFQM/gestioncalidad/src/controller/ControllerConfig.java</file>
-            <file>file:/C:/Users/Cohen/Dropbox/4to/SG%20de%20Calidad/Sistema%20EFQM/gestioncalidad/src/repository/RepositoryUser.java</file>
-            <file>file:/C:/Users/Cohen/Dropbox/4to/SG%20de%20Calidad/Sistema%20EFQM/gestioncalidad/src/config/Process.xml</file>
-            <file>file:/C:/Users/Cohen/Dropbox/4to/SG%20de%20Calidad/Sistema%20EFQM/gestioncalidad/src/view/criterias/FormCriteria.java</file>
-            <file>file:/C:/Users/Cohen/Dropbox/4to/SG%20de%20Calidad/Sistema%20EFQM/gestioncalidad/src/gestioncalidad/main.java</file>
-            <file>file:/C:/Users/Cohen/Dropbox/4to/SG%20de%20Calidad/Sistema%20EFQM/gestioncalidad/src/model/PCSubCriteria.java</file>
-            <file>file:/C:/Users/Cohen/Dropbox/4to/SG%20de%20Calidad/Sistema%20EFQM/gestioncalidad/src/model/User.java</file>
-            <file>file:/C:/Users/Cohen/Dropbox/4to/SG%20de%20Calidad/Sistema%20EFQM/gestioncalidad/src/controller/ControllerCriteria.java</file>
+            <file>file:/C:/Users/Cohen/Dropbox/4to/SG%20de%20Calidad/Sistema%20EFQM/gestioncalidad/src/repository/RepositoryResponse.java</file>
+            <file>file:/C:/Users/Cohen/Dropbox/4to/SG%20de%20Calidad/Sistema%20EFQM/gestioncalidad/src/view/quiz/FormQuiz.java</file>
+            <file>file:/C:/Users/Cohen/Dropbox/4to/SG%20de%20Calidad/Sistema%20EFQM/gestioncalidad/src/config/AverageCriteria.xml</file>
             <file>file:/C:/Users/Cohen/Dropbox/4to/SG%20de%20Calidad/Sistema%20EFQM/gestioncalidad/src/controller/ControllerQuiz.java</file>
-            <file>file:/C:/Users/Cohen/Dropbox/4to/SG%20de%20Calidad/Sistema%20EFQM/gestioncalidad/src/controller/ControllerLogin.java</file>
-            <file>file:/C:/Users/Cohen/Dropbox/4to/SG%20de%20Calidad/Sistema%20EFQM/gestioncalidad/src/controller/ControllerImprovements.java</file>
-            <file>file:/C:/Users/Cohen/Dropbox/4to/SG%20de%20Calidad/Sistema%20EFQM/gestioncalidad/src/config/User.xml</file>
+            <file>file:/C:/Users/Cohen/Dropbox/4to/SG%20de%20Calidad/Sistema%20EFQM/gestioncalidad/src/view/period/SelectPeriod.java</file>
         </group>
     </open-files>
 </project-private>

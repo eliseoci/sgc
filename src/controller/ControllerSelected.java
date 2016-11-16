@@ -41,7 +41,14 @@ public class ControllerSelected {
 
     public void getAllPeriod(SelectPeriod view) {
         try {
-            List<Period> periods = repositoryPeriod.getAll();
+            List<Period> periods;
+            if(view.getOrigin().equals("improvement")){
+                periods = repositoryPeriod.getAll();
+            } else if(view.getOrigin().equals("report")){
+                periods = repositoryPeriod.getAllPeriodsProcessed();
+            } else {
+                periods = repositoryPeriod.getAllPeriodsUnprocessed();
+            }
             for (Period period : periods) {
                 view.getCbSelectPeriod().addItem(period);
             }
@@ -70,7 +77,7 @@ public class ControllerSelected {
                                 JOptionPane.showMessageDialog(view, "Este Periodo ya fue procesado.", "Error", JOptionPane.ERROR_MESSAGE);
                             }
                         } catch (SQLException ex) {
-                            JOptionPane.showMessageDialog(view, "No se proceso los datos.", "Error", JOptionPane.ERROR_MESSAGE);
+                            JOptionPane.showMessageDialog(view, "No se pudo procesar los datos.", "Error", JOptionPane.ERROR_MESSAGE);
                         }
                         break;
                     case "report":

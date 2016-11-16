@@ -116,12 +116,14 @@ public class ControllerQuiz {
         r.setIdpcs(formQuiz.getIdSubCriteria());
         r.setIdpc(formQuiz.getIdCriteria());
         r.setIdPeriod(formQuiz.getIdPeriod());
+        r.setEvidence(formQuiz.getEvidence().getText());
         responses.add(r);
     }
 
     public void saveRsponses(FormQuiz view) throws SQLException {
         repositoryResponse.insertAllResponses(responses);
         repositoryAverage.averageByResponses(new AverageByResponses(view.getIdPeriod(), GUID));
+        JOptionPane.showMessageDialog(view, "Respuestas guardadas con éxito", "Éxito", JOptionPane.INFORMATION_MESSAGE);
         logger.trace("Respuestas insertadas");
     }
 }

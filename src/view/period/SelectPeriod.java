@@ -25,8 +25,8 @@ public class SelectPeriod extends javax.swing.JDialog {
         initComponents();
         setLocationRelativeTo(null);
         controllerSelected = new ControllerSelected();
-        controllerSelected.getAllPeriod(this);
         this.origin = origin;
+        controllerSelected.getAllPeriod(this);
     }
 
     public JComboBox getCbSelectPeriod() {
@@ -140,6 +140,7 @@ public class SelectPeriod extends javax.swing.JDialog {
 
     private void btnSelectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSelectActionPerformed
         controllerSelected.openForm(this);
+        dispose();
     }//GEN-LAST:event_btnSelectActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

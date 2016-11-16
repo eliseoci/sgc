@@ -18,11 +18,12 @@ public class Response {
     private int idpcs;
     private int idpcsp;
     private int idpcspq;
+    private String evidence;
 
     public Response() {
     }
 
-    public Response(String GUID, int answer, int idPeriod, int idpc, int idpcs, int idpcsp, int idpcspq) {
+    public Response(String GUID, int answer, int idPeriod, int idpc, int idpcs, int idpcsp, int idpcspq, String evidence) {
         this.GUID = GUID;
         this.answer = answer;
         this.idPeriod = idPeriod;
@@ -30,7 +31,10 @@ public class Response {
         this.idpcs = idpcs;
         this.idpcsp = idpcsp;
         this.idpcspq = idpcspq;
+        this.evidence = evidence;
     }
+    
+    
 
     public String getGUID() {
         return GUID;
@@ -86,6 +90,14 @@ public class Response {
 
     public void setIdpcspq(int idpcspq) {
         this.idpcspq = idpcspq;
+    }
+
+    public String getEvidence() {
+        return evidence;
+    }
+
+    public void setEvidence(String evidence) {
+        this.evidence = evidence;
     }
 
 }

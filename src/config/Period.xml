@@ -26,6 +26,10 @@
         SELECT * FROM period WHERE period.period_processed = 1;
     </select>
     
+    <select id="getAllPeriodsUnprocessed" resultMap="PeriodResult">
+        SELECT * FROM period WHERE period.period_processed = 0;
+    </select>
+    
     <select id="existsPeriod" resultMap="ExistsPeriodResult" parameterClass="java.lang.Integer">
         SELECT count(*) ex FROM period where period.idperiod = #period# and period.period_processed = 0;
     </select>

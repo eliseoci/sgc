@@ -137,6 +137,8 @@ public class FormQuiz extends javax.swing.JDialog {
         jLabel4 = new javax.swing.JLabel();
         lbGuid = new javax.swing.JLabel();
         txtCountQuestion = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        evidence = new javax.swing.JTextField();
 
         setTitle("Nueva encuesta");
         setResizable(false);
@@ -181,6 +183,14 @@ public class FormQuiz extends javax.swing.JDialog {
 
         txtCountQuestion.setText("txtCountQuestion");
 
+        jLabel5.setText("Evidencia:");
+
+        evidence.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                evidenceActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -193,14 +203,10 @@ public class FormQuiz extends javax.swing.JDialog {
                         .addComponent(cbAnswer, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(btnNextAndFinish)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 353, Short.MAX_VALUE)
                         .addComponent(btnCancel))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel4)
-                                .addGap(18, 18, 18)
-                                .addComponent(lbGuid, javax.swing.GroupLayout.PREFERRED_SIZE, 272, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel3)
@@ -211,7 +217,15 @@ public class FormQuiz extends javax.swing.JDialog {
                                     .addComponent(lbCriteria, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(lbProcess, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(lbSubCriteria, javax.swing.GroupLayout.DEFAULT_SIZE, 622, Short.MAX_VALUE)))
-                            .addComponent(txtCountQuestion))
+                            .addComponent(txtCountQuestion)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel4)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(lbGuid, javax.swing.GroupLayout.PREFERRED_SIZE, 272, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel5)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(evidence, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -232,18 +246,22 @@ public class FormQuiz extends javax.swing.JDialog {
                     .addComponent(lbProcess))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 19, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel5)
+                    .addComponent(evidence, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
                 .addComponent(txtCountQuestion)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
                     .addComponent(lbGuid))
-                .addGap(13, 13, 13)
+                .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnCancel)
                     .addComponent(btnNextAndFinish)
                     .addComponent(cbAnswer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(22, Short.MAX_VALUE))
+                .addGap(26, 26, 26))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -276,25 +294,33 @@ public class FormQuiz extends javax.swing.JDialog {
             } catch (SQLException e) {
                 e.printStackTrace();
                 JOptionPane.showMessageDialog(this, "Ocurrio un error al intentar guardar las respuestas.", "Error", JOptionPane.ERROR_MESSAGE);
+            } catch (ClassCastException ex){
+                JOptionPane.showMessageDialog(this, "Debe seleccionar una respuesta.", "Error", JOptionPane.ERROR_MESSAGE);
             }
         } else {
             if (cbAnswer.getSelectedIndex() != 0) {
                 controllerQuiz.addResponse(this);
                 controllerQuiz.getQuiz(this);
             } else {
-                JOptionPane.showMessageDialog(this, "Debe seleccionar una Respuesta.", "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Debe seleccionar una respuesta.", "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
     }//GEN-LAST:event_btnNextAndFinishActionPerformed
+
+    private void evidenceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_evidenceActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_evidenceActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancel;
     private javax.swing.JButton btnNextAndFinish;
     private javax.swing.JComboBox cbAnswer;
+    private javax.swing.JTextField evidence;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lbCriteria;
@@ -311,4 +337,12 @@ public class FormQuiz extends javax.swing.JDialog {
     private int idSubCriteria;
     private int idCriteria;
     private boolean isFinished;
+
+    public javax.swing.JTextField getEvidence() {
+        return evidence;
+    }
+
+    public void setEvidence(javax.swing.JTextField evidence) {
+        this.evidence = evidence;
+    }
 }

@@ -30,6 +30,10 @@ public class RepositoryPeriod {
     public List<Period> getAllPeriodsProcessed() throws SQLException {
         return (List<Period>) CustomSqlMap.getInstance().queryForList("getAllPeriodsProcessed");
     }
+    
+    public List<Period> getAllPeriodsUnprocessed() throws SQLException {
+        return (List<Period>) CustomSqlMap.getInstance().queryForList("getAllPeriodsUnprocessed");
+    }
 
     public void updateDescription(Period period) throws SQLException {
         CustomSqlMap.getInstance().update("updateDescriptionPeriod", period);

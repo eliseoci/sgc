@@ -4,7 +4,7 @@
  
 <sqlMap namespace="reponse">
     <insert id="insertResponse" parameterClass="model.Response">
-        INSERT INTO `responses_people`(`hash`, `type_answer`, `pcsp_questions`, `pcs_process`, `pc_subcriteria`, `period_criteria`, `period`) 
-        VALUES (#GUID#,#answer#,#idpcspq#,#idpcsp#,#idpcs#,#idpc#,#idPeriod#)
+        INSERT INTO `responses_people`(`hash`, `type_answer`, `pcsp_questions`, `pcs_process`, `pc_subcriteria`, `period_criteria`, `period`, `evidence`) 
+        VALUES (#GUID#,#answer#,#idpcspq#,#idpcsp#,#idpcs#,#idpc#,#idPeriod#,#evidence#)
     </insert>
 </sqlMap>
