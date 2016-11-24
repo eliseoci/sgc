@@ -408,7 +408,6 @@ ENGINE = InnoDB
 AUTO_INCREMENT = 16
 DEFAULT CHARACTER SET = utf8;
 
-
 -- -----------------------------------------------------
 -- Table `dbc109a5c2d0164d93bc7ca6be01867c08`.`users`
 -- -----------------------------------------------------
