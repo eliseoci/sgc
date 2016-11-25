@@ -20,4 +20,8 @@ public class RepositoryUser {
     public void createUser(User user) throws SQLException {
         CustomSqlMap.getInstance().insert("saveUser", user);
     }
+    
+    public void updateUser(User user) throws SQLException{
+        CustomSqlMap.getInstance().update("updateUser", user);
+    }
 }

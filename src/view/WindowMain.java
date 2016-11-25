@@ -60,6 +60,8 @@ public class WindowMain extends javax.swing.JFrame {
         menuItemProcessData = new javax.swing.JMenuItem();
         menuItemReport = new javax.swing.JMenuItem();
         jMenuItem1 = new javax.swing.JMenuItem();
+        jMenu1 = new javax.swing.JMenu();
+        cambiarPass = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("EFQM - Sistema de Gestión de Calidad");
@@ -203,6 +205,18 @@ public class WindowMain extends javax.swing.JFrame {
 
         menuBar.add(menuReport);
 
+        jMenu1.setText("Administrador");
+
+        cambiarPass.setText("Modificar contraseña");
+        cambiarPass.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cambiarPassActionPerformed(evt);
+            }
+        });
+        jMenu1.add(cambiarPass);
+
+        menuBar.add(jMenu1);
+
         setJMenuBar(menuBar);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -298,6 +312,12 @@ public class WindowMain extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
+    private void cambiarPassActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cambiarPassActionPerformed
+        // TODO add your handling code here:
+        this.newPasswordForm = new NewPasswordForm(this, true);
+        this.newPasswordForm.setVisible(true);
+    }//GEN-LAST:event_cambiarPassActionPerformed
+
     private boolean isOpen(Object obj) {
         JInternalFrame[] internalFrames = this.desktopPane.getAllFrames();
         boolean close = true;
@@ -313,8 +333,10 @@ public class WindowMain extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenuItem cambiarPass;
     private javax.swing.JDesktopPane desktopPane;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuBar menuBar;
     private javax.swing.JMenu menuFile;
@@ -339,4 +361,5 @@ public class WindowMain extends javax.swing.JFrame {
     private ListSubC listSubC;
     private ListProcess listProcess;
     private ListPeriod listPeriod;
+    private NewPasswordForm newPasswordForm;
 }

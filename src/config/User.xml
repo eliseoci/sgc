@@ -18,4 +18,7 @@
             VALUES (#username#, #pass#)
     </insert>
 
+    <update id="updateUser" parameterClass="model.User">
+        UPDATE users SET username = #username#, pass = #pass# WHERE id= #id#;
+    </update>
 </sqlMap>
