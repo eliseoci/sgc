@@ -63,6 +63,7 @@ public class ControllerQuiz {
 
     public void getAllAnswer(FormQuiz formQuiz) throws SQLException {
         answers = repositoryAnswer.getAllAnswer(formQuiz.getIdCriteria());
+        HelperOfForms.cleanTextField(formQuiz.getEvidence());
         HelperOfForms.cleanJComboBox(formQuiz.getCbAnswer(), "Seleccionar Respuesta");
         for (Answer answer : answers) {
             formQuiz.getCbAnswer().addItem(answer);

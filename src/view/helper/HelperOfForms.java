@@ -7,6 +7,7 @@ package view.helper;
 
 import javax.swing.JComboBox;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -46,6 +47,10 @@ public class HelperOfForms {
     public static void cleanJComboBox(JComboBox comboBox, String message) {
         comboBox.removeAllItems();
         comboBox.addItem(message);
+    }
+    
+    public static void cleanTextField(JTextField field) {
+        field.setText("");
     }
 
 }
