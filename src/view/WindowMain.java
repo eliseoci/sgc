@@ -5,6 +5,7 @@
  */
 package view;
 
+import javax.swing.ImageIcon;
 import view.questions.ListQuestion;
 import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
@@ -31,6 +32,8 @@ public class WindowMain extends javax.swing.JFrame {
         menuItemSubCriteria.setVisible(false);
         menuItemProcess.setVisible(false);
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        ImageIcon icon = new ImageIcon("src/imagenes/logo.png");
+        jLabel1.setIcon(icon);
     }
 
     /**
@@ -70,7 +73,6 @@ public class WindowMain extends javax.swing.JFrame {
 
         jLabel1.setBackground(new java.awt.Color(255, 255, 255));
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/autoevalEFQM.png"))); // NOI18N
 
         javax.swing.GroupLayout desktopPaneLayout = new javax.swing.GroupLayout(desktopPane);
         desktopPane.setLayout(desktopPaneLayout);

@@ -73,6 +73,7 @@ public class ControllerSelected {
                         try {
                             if (repositoryPeriod.existsPeriod(idPeriod) == 1) {
                                 repositoryAverage.processData(idPeriod);
+                                JOptionPane.showMessageDialog(view, "Período procesado con éxito", "Éxito", JOptionPane.INFORMATION_MESSAGE);
                             } else {
                                 JOptionPane.showMessageDialog(view, "Este Periodo ya fue procesado.", "Error", JOptionPane.ERROR_MESSAGE);
                             }

@@ -5,16 +5,14 @@ SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
 
 -- -----------------------------------------------------
--- Schema mydb
+-- Schema sgc_efqm
 -- -----------------------------------------------------
+CREATE SCHEMA IF NOT EXISTS `sgc_efqm`;
+USE `sgc_efqm`;
 -- -----------------------------------------------------
--- Schema dbc109a5c2d0164d93bc7ca6be01867c08
+-- Table `sgc_efqm`.`answer`
 -- -----------------------------------------------------
-
--- -----------------------------------------------------
--- Table `dbc109a5c2d0164d93bc7ca6be01867c08`.`answer`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `dbc109a5c2d0164d93bc7ca6be01867c08`.`answer` (
+CREATE TABLE IF NOT EXISTS `sgc_efqm`.`answer` (
   `idanswer` INT(11) NOT NULL AUTO_INCREMENT,
   `description` VARCHAR(100) NOT NULL,
   PRIMARY KEY (`idanswer`))
@@ -24,9 +22,9 @@ DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `dbc109a5c2d0164d93bc7ca6be01867c08`.`criteria`
+-- Table `sgc_efqm`.`criteria`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `dbc109a5c2d0164d93bc7ca6be01867c08`.`criteria` (
+CREATE TABLE IF NOT EXISTS `sgc_efqm`.`criteria` (
   `idcriteria` INT(11) NOT NULL AUTO_INCREMENT,
   `description` VARCHAR(150) NOT NULL,
   `type` INT(11) NOT NULL,
@@ -38,9 +36,9 @@ DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `dbc109a5c2d0164d93bc7ca6be01867c08`.`period`
+-- Table `sgc_efqm`.`period`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `dbc109a5c2d0164d93bc7ca6be01867c08`.`period` (
+CREATE TABLE IF NOT EXISTS `sgc_efqm`.`period` (
   `idperiod` INT(11) NOT NULL AUTO_INCREMENT,
   `description` VARCHAR(125) NOT NULL,
   `period_processed` INT(11) NOT NULL,
@@ -51,9 +49,9 @@ DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `dbc109a5c2d0164d93bc7ca6be01867c08`.`period_criteria`
+-- Table `sgc_efqm`.`period_criteria`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `dbc109a5c2d0164d93bc7ca6be01867c08`.`period_criteria` (
+CREATE TABLE IF NOT EXISTS `sgc_efqm`.`period_criteria` (
   `idpc` INT(11) NOT NULL AUTO_INCREMENT,
   `criteria` INT(11) NOT NULL,
   `period` INT(11) NOT NULL,
@@ -63,12 +61,12 @@ CREATE TABLE IF NOT EXISTS `dbc109a5c2d0164d93bc7ca6be01867c08`.`period_criteria
   INDEX `fk_period_criteria_period1_idx` (`period` ASC),
   CONSTRAINT `fk_period_criteria_criteria1`
     FOREIGN KEY (`criteria`)
-    REFERENCES `dbc109a5c2d0164d93bc7ca6be01867c08`.`criteria` (`idcriteria`)
+    REFERENCES `sgc_efqm`.`criteria` (`idcriteria`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_period_criteria_period1`
     FOREIGN KEY (`period`)
-    REFERENCES `dbc109a5c2d0164d93bc7ca6be01867c08`.`period` (`idperiod`)
+    REFERENCES `sgc_efqm`.`period` (`idperiod`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
@@ -77,9 +75,9 @@ DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `dbc109a5c2d0164d93bc7ca6be01867c08`.`average_criteria`
+-- Table `sgc_efqm`.`average_criteria`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `dbc109a5c2d0164d93bc7ca6be01867c08`.`average_criteria` (
+CREATE TABLE IF NOT EXISTS `sgc_efqm`.`average_criteria` (
   `idaverage_criteria` INT(11) NOT NULL AUTO_INCREMENT,
   `period_criteria` INT(11) NOT NULL,
   `period` INT(11) NOT NULL,
@@ -88,7 +86,7 @@ CREATE TABLE IF NOT EXISTS `dbc109a5c2d0164d93bc7ca6be01867c08`.`average_criteri
   INDEX `fk_average_criteria_poll_criteria1_idx` (`period_criteria` ASC, `period` ASC),
   CONSTRAINT `fk_average_criteria_poll_criteria1`
     FOREIGN KEY (`period_criteria` , `period`)
-    REFERENCES `dbc109a5c2d0164d93bc7ca6be01867c08`.`period_criteria` (`idpc` , `period`)
+    REFERENCES `sgc_efqm`.`period_criteria` (`idpc` , `period`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
@@ -97,9 +95,9 @@ DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `dbc109a5c2d0164d93bc7ca6be01867c08`.`subcriteria`
+-- Table `sgc_efqm`.`subcriteria`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `dbc109a5c2d0164d93bc7ca6be01867c08`.`subcriteria` (
+CREATE TABLE IF NOT EXISTS `sgc_efqm`.`subcriteria` (
   `idsubcriteria` INT(11) NOT NULL AUTO_INCREMENT,
   `description` VARCHAR(150) NOT NULL,
   PRIMARY KEY (`idsubcriteria`))
@@ -109,9 +107,9 @@ DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `dbc109a5c2d0164d93bc7ca6be01867c08`.`pc_subcriteria`
+-- Table `sgc_efqm`.`pc_subcriteria`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `dbc109a5c2d0164d93bc7ca6be01867c08`.`pc_subcriteria` (
+CREATE TABLE IF NOT EXISTS `sgc_efqm`.`pc_subcriteria` (
   `idpcs` INT(11) NOT NULL AUTO_INCREMENT,
   `subcriteria` INT(11) NOT NULL,
   `period_criteria` INT(11) NOT NULL,
@@ -123,12 +121,12 @@ CREATE TABLE IF NOT EXISTS `dbc109a5c2d0164d93bc7ca6be01867c08`.`pc_subcriteria`
   INDEX `fk_pc_subcriteria_period_criteria1_idx` (`period_criteria` ASC, `period` ASC),
   CONSTRAINT `fk_pc_subcriteria_period_criteria1`
     FOREIGN KEY (`period_criteria` , `period`)
-    REFERENCES `dbc109a5c2d0164d93bc7ca6be01867c08`.`period_criteria` (`idpc` , `period`)
+    REFERENCES `sgc_efqm`.`period_criteria` (`idpc` , `period`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_pc_subcriteria_subcriteria1`
     FOREIGN KEY (`subcriteria`)
-    REFERENCES `dbc109a5c2d0164d93bc7ca6be01867c08`.`subcriteria` (`idsubcriteria`)
+    REFERENCES `sgc_efqm`.`subcriteria` (`idsubcriteria`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
@@ -137,9 +135,9 @@ DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `dbc109a5c2d0164d93bc7ca6be01867c08`.`process`
+-- Table `sgc_efqm`.`process`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `dbc109a5c2d0164d93bc7ca6be01867c08`.`process` (
+CREATE TABLE IF NOT EXISTS `sgc_efqm`.`process` (
   `idprocess` INT(11) NOT NULL AUTO_INCREMENT,
   `description` VARCHAR(150) NOT NULL,
   PRIMARY KEY (`idprocess`))
@@ -149,9 +147,9 @@ DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `dbc109a5c2d0164d93bc7ca6be01867c08`.`pcs_process`
+-- Table `sgc_efqm`.`pcs_process`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `dbc109a5c2d0164d93bc7ca6be01867c08`.`pcs_process` (
+CREATE TABLE IF NOT EXISTS `sgc_efqm`.`pcs_process` (
   `idpcsp` INT(11) NOT NULL AUTO_INCREMENT,
   `process` INT(11) NOT NULL,
   `pc_subcriteria` INT(11) NOT NULL,
@@ -162,12 +160,12 @@ CREATE TABLE IF NOT EXISTS `dbc109a5c2d0164d93bc7ca6be01867c08`.`pcs_process` (
   INDEX `fk_pcs_process_pc_subcriteria1_idx` (`pc_subcriteria` ASC, `period_criteria` ASC, `period` ASC),
   CONSTRAINT `fk_pcs_process_pc_subcriteria1`
     FOREIGN KEY (`pc_subcriteria` , `period_criteria` , `period`)
-    REFERENCES `dbc109a5c2d0164d93bc7ca6be01867c08`.`pc_subcriteria` (`idpcs` , `period_criteria` , `period`)
+    REFERENCES `sgc_efqm`.`pc_subcriteria` (`idpcs` , `period_criteria` , `period`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_pcs_process_process1`
     FOREIGN KEY (`process`)
-    REFERENCES `dbc109a5c2d0164d93bc7ca6be01867c08`.`process` (`idprocess`)
+    REFERENCES `sgc_efqm`.`process` (`idprocess`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
@@ -176,9 +174,9 @@ DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `dbc109a5c2d0164d93bc7ca6be01867c08`.`average_process`
+-- Table `sgc_efqm`.`average_process`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `dbc109a5c2d0164d93bc7ca6be01867c08`.`average_process` (
+CREATE TABLE IF NOT EXISTS `sgc_efqm`.`average_process` (
   `idag` INT(11) NOT NULL AUTO_INCREMENT,
   `pcs_process` INT(11) NOT NULL,
   `pc_subcriteria` INT(11) NOT NULL,
@@ -191,7 +189,7 @@ CREATE TABLE IF NOT EXISTS `dbc109a5c2d0164d93bc7ca6be01867c08`.`average_process
   INDEX `fk_average_process_pcs_process1_idx` (`pcs_process` ASC, `pc_subcriteria` ASC, `period_criteria` ASC, `period` ASC),
   CONSTRAINT `fk_average_process_pcs_process1`
     FOREIGN KEY (`pcs_process` , `pc_subcriteria` , `period_criteria` , `period`)
-    REFERENCES `dbc109a5c2d0164d93bc7ca6be01867c08`.`pcs_process` (`idpcsp` , `pc_subcriteria` , `period_criteria` , `period`)
+    REFERENCES `sgc_efqm`.`pcs_process` (`idpcsp` , `pc_subcriteria` , `period_criteria` , `period`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
@@ -200,9 +198,9 @@ DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `dbc109a5c2d0164d93bc7ca6be01867c08`.`average_responses`
+-- Table `sgc_efqm`.`average_responses`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `dbc109a5c2d0164d93bc7ca6be01867c08`.`average_responses` (
+CREATE TABLE IF NOT EXISTS `sgc_efqm`.`average_responses` (
   `idar` INT(11) NOT NULL AUTO_INCREMENT,
   `criteria` INT(11) NOT NULL,
   `subcriteria` INT(11) NOT NULL,
@@ -213,7 +211,7 @@ CREATE TABLE IF NOT EXISTS `dbc109a5c2d0164d93bc7ca6be01867c08`.`average_respons
   INDEX `fk_average_responses_poll1_idx` (`period` ASC),
   CONSTRAINT `fk_average_responses_poll1`
     FOREIGN KEY (`period`)
-    REFERENCES `dbc109a5c2d0164d93bc7ca6be01867c08`.`period` (`idperiod`)
+    REFERENCES `sgc_efqm`.`period` (`idperiod`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
@@ -222,9 +220,9 @@ DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `dbc109a5c2d0164d93bc7ca6be01867c08`.`average_subcriteria`
+-- Table `sgc_efqm`.`average_subcriteria`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `dbc109a5c2d0164d93bc7ca6be01867c08`.`average_subcriteria` (
+CREATE TABLE IF NOT EXISTS `sgc_efqm`.`average_subcriteria` (
   `idas` INT(11) NOT NULL AUTO_INCREMENT,
   `pc_subcriteria` INT(11) NOT NULL,
   `period_criteria` INT(11) NOT NULL,
@@ -235,7 +233,7 @@ CREATE TABLE IF NOT EXISTS `dbc109a5c2d0164d93bc7ca6be01867c08`.`average_subcrit
   INDEX `fk_average_subcriteria_pc_subcriteria1_idx` (`pc_subcriteria` ASC, `period_criteria` ASC, `period` ASC),
   CONSTRAINT `fk_average_subcriteria_pc_subcriteria1`
     FOREIGN KEY (`pc_subcriteria` , `period_criteria` , `period`)
-    REFERENCES `dbc109a5c2d0164d93bc7ca6be01867c08`.`pc_subcriteria` (`idpcs` , `period_criteria` , `period`)
+    REFERENCES `sgc_efqm`.`pc_subcriteria` (`idpcs` , `period_criteria` , `period`)
     ON DELETE CASCADE
     ON UPDATE CASCADE)
 ENGINE = InnoDB
@@ -244,9 +242,9 @@ DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `dbc109a5c2d0164d93bc7ca6be01867c08`.`priority`
+-- Table `sgc_efqm`.`priority`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `dbc109a5c2d0164d93bc7ca6be01867c08`.`priority` (
+CREATE TABLE IF NOT EXISTS `sgc_efqm`.`priority` (
   `idpriority` INT(11) NOT NULL AUTO_INCREMENT,
   `description` VARCHAR(200) NOT NULL,
   PRIMARY KEY (`idpriority`),
@@ -257,9 +255,9 @@ DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `dbc109a5c2d0164d93bc7ca6be01867c08`.`status`
+-- Table `sgc_efqm`.`status`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `dbc109a5c2d0164d93bc7ca6be01867c08`.`status` (
+CREATE TABLE IF NOT EXISTS `sgc_efqm`.`status` (
   `idstatus` INT(11) NOT NULL AUTO_INCREMENT,
   `description` VARCHAR(200) NOT NULL,
   PRIMARY KEY (`idstatus`),
@@ -270,9 +268,9 @@ DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `dbc109a5c2d0164d93bc7ca6be01867c08`.`improvements`
+-- Table `sgc_efqm`.`improvements`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `dbc109a5c2d0164d93bc7ca6be01867c08`.`improvements` (
+CREATE TABLE IF NOT EXISTS `sgc_efqm`.`improvements` (
   `idimprovements` INT(11) NOT NULL AUTO_INCREMENT,
   `title` VARCHAR(100) NOT NULL,
   `description` LONGTEXT NOT NULL,
@@ -286,17 +284,17 @@ CREATE TABLE IF NOT EXISTS `dbc109a5c2d0164d93bc7ca6be01867c08`.`improvements` (
   INDEX `fk_improvements_status1_idx` (`status` ASC),
   CONSTRAINT `fk_improvements_period1`
     FOREIGN KEY (`period`)
-    REFERENCES `dbc109a5c2d0164d93bc7ca6be01867c08`.`period` (`idperiod`)
+    REFERENCES `sgc_efqm`.`period` (`idperiod`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_improvements_priority1`
     FOREIGN KEY (`priority`)
-    REFERENCES `dbc109a5c2d0164d93bc7ca6be01867c08`.`priority` (`idpriority`)
+    REFERENCES `sgc_efqm`.`priority` (`idpriority`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_improvements_status1`
     FOREIGN KEY (`status`)
-    REFERENCES `dbc109a5c2d0164d93bc7ca6be01867c08`.`status` (`idstatus`)
+    REFERENCES `sgc_efqm`.`status` (`idstatus`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
@@ -305,9 +303,9 @@ DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `dbc109a5c2d0164d93bc7ca6be01867c08`.`logs`
+-- Table `sgc_efqm`.`logs`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `dbc109a5c2d0164d93bc7ca6be01867c08`.`logs` (
+CREATE TABLE IF NOT EXISTS `sgc_efqm`.`logs` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
   `dated` DATE NOT NULL,
   `logger` VARCHAR(50) NOT NULL,
@@ -322,21 +320,21 @@ DEFAULT CHARACTER SET = latin1;
 
 
 -- -----------------------------------------------------
--- Table `dbc109a5c2d0164d93bc7ca6be01867c08`.`questions`
+-- Table `sgc_efqm`.`questions`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `dbc109a5c2d0164d93bc7ca6be01867c08`.`questions` (
+CREATE TABLE IF NOT EXISTS `sgc_efqm`.`questions` (
   `idquestions` INT(11) NOT NULL AUTO_INCREMENT,
   `question` TEXT NOT NULL,
   PRIMARY KEY (`idquestions`))
 ENGINE = InnoDB
 AUTO_INCREMENT = 244
-DEFAULT CHARACTER SET = utf8;
+DEFAULT CHARACTER SET = utf8mb4;
 
 
 -- -----------------------------------------------------
--- Table `dbc109a5c2d0164d93bc7ca6be01867c08`.`pcsp_questions`
+-- Table `sgc_efqm`.`pcsp_questions`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `dbc109a5c2d0164d93bc7ca6be01867c08`.`pcsp_questions` (
+CREATE TABLE IF NOT EXISTS `sgc_efqm`.`pcsp_questions` (
   `idpcspq` INT(11) NOT NULL AUTO_INCREMENT,
   `questions_idquestions` INT(11) NOT NULL,
   `pcs_process` INT(11) NOT NULL,
@@ -348,12 +346,12 @@ CREATE TABLE IF NOT EXISTS `dbc109a5c2d0164d93bc7ca6be01867c08`.`pcsp_questions`
   INDEX `fk_pcsp_questions_pcs_process1_idx` (`pcs_process` ASC, `pc_subcriteria` ASC, `period_criteria` ASC, `period` ASC),
   CONSTRAINT `fk_pcsp_questions_pcs_process1`
     FOREIGN KEY (`pcs_process` , `pc_subcriteria` , `period_criteria` , `period`)
-    REFERENCES `dbc109a5c2d0164d93bc7ca6be01867c08`.`pcs_process` (`idpcsp` , `pc_subcriteria` , `period_criteria` , `period`)
+    REFERENCES `sgc_efqm`.`pcs_process` (`idpcsp` , `pc_subcriteria` , `period_criteria` , `period`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_pcsp_questions_questions1`
     FOREIGN KEY (`questions_idquestions`)
-    REFERENCES `dbc109a5c2d0164d93bc7ca6be01867c08`.`questions` (`idquestions`)
+    REFERENCES `sgc_efqm`.`questions` (`idquestions`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
@@ -362,9 +360,9 @@ DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `dbc109a5c2d0164d93bc7ca6be01867c08`.`responses_people`
+-- Table `sgc_efqm`.`responses_people`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `dbc109a5c2d0164d93bc7ca6be01867c08`.`responses_people` (
+CREATE TABLE IF NOT EXISTS `sgc_efqm`.`responses_people` (
   `idresppeo` INT(11) NOT NULL AUTO_INCREMENT,
   `hash` VARCHAR(45) NOT NULL,
   `pcsp_questions` INT(11) NOT NULL,
@@ -373,6 +371,7 @@ CREATE TABLE IF NOT EXISTS `dbc109a5c2d0164d93bc7ca6be01867c08`.`responses_peopl
   `period_criteria` INT(11) NOT NULL,
   `period` INT(11) NOT NULL,
   `type_answer` INT(11) NOT NULL,
+  `evidence` VARCHAR(255) NULL DEFAULT NULL,
   PRIMARY KEY (`idresppeo`),
   INDEX `fk_responses_people_pcsp_questions1_idx` (`pcsp_questions` ASC, `pcs_process` ASC, `pc_subcriteria` ASC, `period_criteria` ASC, `period` ASC),
   INDEX `fk_responses_people_type_answer1_idx` (`type_answer` ASC))
@@ -382,9 +381,9 @@ DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `dbc109a5c2d0164d93bc7ca6be01867c08`.`type`
+-- Table `sgc_efqm`.`type`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `dbc109a5c2d0164d93bc7ca6be01867c08`.`type` (
+CREATE TABLE IF NOT EXISTS `sgc_efqm`.`type` (
   `idtype` INT(11) NOT NULL AUTO_INCREMENT,
   `description` VARCHAR(150) NULL DEFAULT NULL,
   PRIMARY KEY (`idtype`))
@@ -394,9 +393,9 @@ DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `dbc109a5c2d0164d93bc7ca6be01867c08`.`type_answer`
+-- Table `sgc_efqm`.`type_answer`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `dbc109a5c2d0164d93bc7ca6be01867c08`.`type_answer` (
+CREATE TABLE IF NOT EXISTS `sgc_efqm`.`type_answer` (
   `idta` INT(11) NOT NULL AUTO_INCREMENT,
   `type` INT(11) NOT NULL,
   `answer` INT(11) NOT NULL,
@@ -409,9 +408,9 @@ AUTO_INCREMENT = 16
 DEFAULT CHARACTER SET = utf8;
 
 -- -----------------------------------------------------
--- Table `dbc109a5c2d0164d93bc7ca6be01867c08`.`users`
+-- Table `sgc_efqm`.`users`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `dbc109a5c2d0164d93bc7ca6be01867c08`.`users` (
+CREATE TABLE IF NOT EXISTS `sgc_efqm`.`users` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
   `username` VARCHAR(45) NULL DEFAULT NULL,
   `pass` VARCHAR(45) NOT NULL,
@@ -494,7 +493,8 @@ INSERT INTO `subcriteria` (`idsubcriteria`, `description`) VALUES
 
 INSERT INTO `period` (`idperiod`, `description`, `period_processed`) VALUES
 (1, '2012', 1),
-(3, '2015', 1);
+(3, '2015', 1),
+(7, '2016', 0);
 
 INSERT INTO `criteria` (`idcriteria`, `description`, `type`) VALUES
 (1, 'Liderazgo', 1),
@@ -3897,6 +3897,228 @@ INSERT INTO `responses_people` (`idresppeo`, `hash`, `pcsp_questions`, `pcs_proc
 (1885, 'b01b1152-d18a-416a-bdea-5cd554fbd64e', 229, 106, 71, 27, 3, 6),
 (1886, 'b01b1152-d18a-416a-bdea-5cd554fbd64e', 230, 107, 71, 27, 3, 6),
 (1887, 'b01b1152-d18a-416a-bdea-5cd554fbd64e', 231, 107, 71, 27, 3, 6);
+
+-- -----------------------------------------------------
+-- Volcado de datos Período 2016
+-- -----------------------------------------------------
+
+INSERT INTO `period_criteria` (`idpc`, `criteria`, `period`, `point_efqm`) VALUES
+(28, 1, 7, '100.00'),
+(29, 2, 7, '100.00'),
+(30, 3, 7, '100.00'),
+(31, 4, 7, '100.00'),
+(32, 5, 7, '100.00'),
+(33, 6, 7, '150.00'),
+(34, 7, 7, '100.00'),
+(35, 8, 7, '100.00'),
+(36, 9, 7, '150.00');
+
+INSERT INTO `pc_subcriteria` (`idpcs`, `subcriteria`, `period_criteria`, `period`, `adjustment`, `percentage`) VALUES
+(72, 1, 28, 7, '1.00', '0.00'),
+(73, 2, 28, 7, '0.50', '0.00'),
+(74, 3, 28, 7, '1.00', '0.00'),
+(75, 4, 28, 7, '1.00', '0.00'),
+(76, 5, 28, 7, '0.75', '0.00'),
+(77, 6, 29, 7, '0.75', '0.00'),
+(78, 7, 29, 7, '1.00', '0.00'),
+(79, 8, 29, 7, '1.00', '0.00'),
+(80, 9, 29, 7, '1.00', '0.00'),
+(81, 10, 30, 7, '1.00', '0.00'),
+(82, 11, 30, 7, '0.50', '0.00'),
+(83, 12, 30, 7, '0.25', '0.00'),
+(84, 13, 30, 7, '0.50', '0.00'),
+(85, 14, 30, 7, '0.25', '0.00'),
+(86, 15, 31, 7, '1.00', '0.00'),
+(87, 16, 31, 7, '1.00', '0.00'),
+(88, 17, 31, 7, '1.00', '0.00'),
+(89, 18, 31, 7, '1.00', '0.00'),
+(90, 19, 31, 7, '0.50', '0.00'),
+(91, 20, 32, 7, '1.00', '0.00'),
+(92, 21, 32, 7, '1.00', '0.00'),
+(93, 22, 32, 7, '1.00', '0.00'),
+(94, 23, 32, 7, '0.75', '0.00'),
+(95, 24, 32, 7, '0.75', '0.00'),
+(96, 25, 33, 7, '0.50', '0.75'),
+(97, 26, 33, 7, '0.75', '0.25'),
+(98, 27, 34, 7, '1.00', '0.75'),
+(99, 28, 34, 7, '1.00', '0.25'),
+(100, 29, 35, 7, '0.50', '0.50'),
+(101, 30, 35, 7, '0.50', '0.50'),
+(102, 31, 36, 7, '0.50', '0.50'),
+(103, 32, 36, 7, '1.00', '0.50');
+
+INSERT INTO `pcs_process` (`idpcsp`, `process`, `pc_subcriteria`, `period_criteria`, `period`) VALUES
+(110, 1, 72, 28, 7),
+(116, 1, 77, 29, 7),
+(120, 1, 81, 30, 7),
+(125, 1, 86, 31, 7),
+(130, 1, 91, 32, 7),
+(137, 1, 96, 33, 7),
+(144, 1, 98, 34, 7),
+(150, 1, 100, 35, 7),
+(153, 1, 102, 36, 7),
+(111, 2, 73, 28, 7),
+(117, 2, 78, 29, 7),
+(121, 2, 82, 30, 7),
+(126, 2, 87, 31, 7),
+(131, 2, 91, 32, 7),
+(138, 2, 96, 33, 7),
+(145, 2, 98, 34, 7),
+(151, 2, 101, 35, 7),
+(154, 2, 102, 36, 7),
+(112, 3, 74, 28, 7),
+(118, 3, 79, 29, 7),
+(122, 3, 83, 30, 7),
+(127, 3, 88, 31, 7),
+(132, 3, 92, 32, 7),
+(139, 3, 96, 33, 7),
+(146, 3, 98, 34, 7),
+(152, 3, 101, 35, 7),
+(155, 3, 102, 36, 7),
+(113, 4, 75, 28, 7),
+(119, 4, 80, 29, 7),
+(123, 4, 84, 30, 7),
+(128, 4, 89, 31, 7),
+(133, 4, 93, 32, 7),
+(140, 4, 96, 33, 7),
+(147, 4, 99, 34, 7),
+(156, 4, 103, 36, 7),
+(114, 5, 75, 28, 7),
+(124, 5, 85, 30, 7),
+(129, 5, 90, 31, 7),
+(134, 5, 93, 32, 7),
+(141, 5, 97, 33, 7),
+(148, 5, 99, 34, 7),
+(157, 5, 103, 36, 7),
+(115, 6, 76, 28, 7),
+(135, 6, 94, 32, 7),
+(142, 6, 97, 33, 7),
+(149, 6, 99, 34, 7),
+(158, 6, 103, 36, 7),
+(136, 7, 95, 32, 7),
+(143, 7, 97, 33, 7),
+(159, 7, 103, 36, 7);
+
+INSERT INTO `pcsp_questions` (`idpcspq`, `questions_idquestions`, `pcs_process`, `pc_subcriteria`, `period_criteria`, `period`) VALUES
+(232, 12, 110, 72, 28, 7),
+(233, 13, 110, 72, 28, 7),
+(234, 14, 110, 72, 28, 7),
+(235, 15, 111, 73, 28, 7),
+(236, 16, 112, 74, 28, 7),
+(237, 17, 112, 74, 28, 7),
+(238, 18, 113, 75, 28, 7),
+(239, 19, 113, 75, 28, 7),
+(240, 20, 113, 75, 28, 7),
+(241, 21, 114, 75, 28, 7),
+(242, 22, 114, 75, 28, 7),
+(243, 23, 114, 75, 28, 7),
+(243, 24, 115, 76, 28, 7),
+(244, 25, 115, 76, 28, 7),
+(245, 26, 115, 76, 28, 7),
+(246, 27, 116, 77, 29, 7),
+(247, 28, 117, 78, 29, 7),
+(248, 29, 118, 79, 29, 7),
+(249, 30, 118, 79, 29, 7),
+(250, 31, 118, 79, 29, 7),
+(251, 32, 119, 80, 29, 7),
+(252, 33, 119, 80, 29, 7),
+(253, 34, 119, 80, 29, 7),
+(254, 35, 120, 81, 30, 7),
+(255, 36, 120, 81, 30, 7),
+(256, 37, 121, 82, 30, 7),
+(257, 38, 121, 82, 30, 7),
+(258, 39, 121, 82, 30, 7),
+(259, 40, 122, 83, 30, 7),
+(260, 41, 122, 83, 30, 7),
+(261, 42, 122, 83, 30, 7),
+(262, 43, 123, 84, 30, 7),
+(263, 44, 123, 84, 30, 7),
+(264, 45, 123, 84, 30, 7),
+(265, 46, 124, 85, 30, 7),
+(266, 47, 124, 85, 30, 7),
+(267, 48, 124, 85, 30, 7),
+(268, 49, 124, 85, 30, 7),
+(269, 50, 125, 86, 31, 7),
+(270, 51, 125, 86, 31, 7),
+(271, 52, 126, 87, 31, 7),
+(272, 53, 126, 87, 31, 7),
+(273, 54, 126, 87, 31, 7),
+(274, 55, 127, 88, 31, 7),
+(275, 56, 127, 88, 31, 7),
+(276, 57, 127, 88, 31, 7),
+(277, 58, 128, 89, 31, 7),
+(278, 59, 128, 89, 31, 7),
+(279, 60, 129, 90, 31, 7),
+(280, 61, 129, 90, 31, 7),
+(281, 62, 129, 90, 31, 7),
+(282, 63, 130, 91, 32, 7),
+(283, 64, 130, 91, 32, 7),
+(284, 65, 131, 91, 32, 7),
+(285, 66, 131, 91, 32, 7),
+(286, 67, 132, 92, 32, 7),
+(287, 68, 132, 92, 32, 7),
+(288, 69, 133, 93, 32, 7),
+(289, 70, 133, 93, 32, 7),
+(290, 71, 134, 93, 32, 7),
+(291, 72, 135, 94, 32, 7),
+(292, 73, 135, 94, 32, 7),
+(293, 74, 135, 94, 32, 7),
+(294, 75, 136, 95, 32, 7),
+(295, 76, 136, 95, 32, 7),
+(296, 77, 136, 95, 32, 7),
+(297, 78, 137, 96, 33, 7),
+(298, 79, 137, 96, 33, 7),
+(299, 80, 138, 96, 33, 7),
+(300, 81, 139, 96, 33, 7),
+(301, 82, 139, 96, 33, 7),
+(302, 83, 139, 96, 33, 7),
+(303, 84, 140, 96, 33, 7),
+(304, 85, 140, 96, 33, 7),
+(305, 86, 141, 97, 33, 7),
+(306, 87, 142, 97, 33, 7),
+(307, 88, 142, 97, 33, 7),
+(308, 89, 142, 97, 33, 7),
+(309, 90, 143, 97, 33, 7),
+(310, 91, 143, 97, 33, 7),
+(311, 92, 144, 98, 34, 7),
+(312, 93, 145, 98, 34, 7),
+(313, 94, 145, 98, 34, 7),
+(314, 95, 145, 98, 34, 7),
+(315, 96, 146, 98, 34, 7),
+(316, 97, 146, 98, 34, 7),
+(317, 98, 147, 99, 34, 7),
+(318, 99, 148, 99, 34, 7),
+(319, 100, 148, 99, 34, 7),
+(320, 101, 148, 99, 34, 7),
+(321, 102, 149, 99, 34, 7),
+(322, 103, 149, 99, 34, 7),
+(323, 104, 150, 100, 35, 7),
+(324, 105, 150, 100, 35, 7),
+(325, 106, 150, 100, 35, 7),
+(326, 107, 151, 101, 35, 7),
+(327, 108, 151, 101, 35, 7),
+(328, 109, 151, 101, 35, 7),
+(329, 110, 151, 101, 35, 7),
+(330, 111, 152, 101, 35, 7),
+(331, 112, 152, 101, 35, 7),
+(332, 113, 153, 102, 36, 7),
+(333, 114, 154, 102, 36, 7),
+(334, 115, 154, 102, 36, 7),
+(335, 116, 155, 102, 36, 7),
+(336, 117, 155, 102, 36, 7),
+(337, 118, 156, 103, 36, 7),
+(338, 119, 157, 103, 36, 7),
+(339, 120, 158, 103, 36, 7),
+(340, 121, 159, 103, 36, 7),
+(341, 122, 159, 103, 36, 7);
+
+-- -----------------------------------------------------
+-- CREATING USER AND ASSIGNING PERMISSIONS
+-- -----------------------------------------------------
+DROP USER 'sgc'@'localhost';
+FLUSH PRIVILEGES;
+CREATE USER 'sgc'@'localhost' IDENTIFIED BY 'sgc';
+GRANT ALL ON `sgc_efqm`.* TO 'sgc'@'localhost';
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
