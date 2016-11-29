@@ -59,6 +59,7 @@ public class ControllerCompare {
             int idPeriod2 = ((Period) view.getCbSelectPeriod1().getSelectedItem()).getId();
             if(idPeriod1 != idPeriod2){
                 try {
+                  DecimalFormat df = new DecimalFormat("####.##");
                   List<ResultCriteria> o = (List<ResultCriteria>) repositoryAverage.getCriteriaResultsFromPeriod(idPeriod1);
                   List<ResultCriteria> o2 = (List<ResultCriteria>) repositoryAverage.getCriteriaResultsFromPeriod(idPeriod2);
                   view.initTable();
@@ -70,16 +71,16 @@ public class ControllerCompare {
                     efqmPointsP2 += o2.get(i).getValue();
                     Object[] row = new Object[4];
                     row[0] = rc.getDescription();
-                    row[1] = rc.getValue();
-                    row[2] = o2.get(i).getValue();
+                    row[1] = df.format(rc.getValue());
+                    row[2] = df.format(o2.get(i).getValue());
                     row[3] = compararResultado(rc.getValue(), o2.get(i).getValue());
                     i++;
                     view.getModel().addRow(row);
                   }
                     Object[] row = new Object[4];
                     row[0] = "Puntaje EFQM Total";
-                    row[1] = efqmPointsP1;
-                    row[2] = efqmPointsP2;
+                    row[1] = df.format(efqmPointsP1);
+                    row[2] = df.format(efqmPointsP2);
                     row[3] = compararResultado(efqmPointsP1, efqmPointsP2);
                     view.getModel().addRow(row);
                   view.getjTable1().setModel(view.getModel());
