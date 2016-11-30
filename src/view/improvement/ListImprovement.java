@@ -27,7 +27,7 @@ public class ListImprovement extends javax.swing.JDialog {
         this.period = period;
         table = new JTable();
         model = new CustomTableModel();
-        String[] column = {"ID", "Titulo"};
+        String[] column = {"ID", "Titulo", "Prioridad", "Estado"};
         HelperOfForms.initTable(table, model, column);
         controllerImprovements = new ControllerImprovements();
         initComponents();

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version last-->
+<!-- Created with Jaspersoft Studio version 6.3.1.final using JasperReports Library version 6.3.1  -->
+<!-- 2016-11-30T09:59:17 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="subReportTotales" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="fe7a87e5-75c7-48d0-8bb5-eb1d37016c09">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="sgc_efqm"/>
 	<parameter name="PeriodSubReport" class="java.lang.Integer"/>
@@ -7,7 +8,7 @@
 		<![CDATA[select 
 	sum(period_criteria.point_efqm) sumPointsMax, 
     sum(average_criteria.value) sumPointsEfqm, 
-    round(sum(round(round(average_criteria.value / period_criteria.point_efqm,2)*100))/9) porc 
+    round(sum(average_criteria.value)/10) porc 
 from 
 	average_criteria,
 	criteria,
@@ -23,7 +24,7 @@ where
 	<field name="sumPointsEfqm" class="java.lang.Double"/>
 	<field name="porc" class="java.math.BigDecimal"/>
 	<title>
-		<band height="200" splitType="Stretch">
+		<band height="210" splitType="Stretch">
 			<textField>
 				<reportElement x="10" y="0" width="150" height="30" uuid="90fab137-b29e-40b2-addb-38b897096171"/>
 				<textFieldExpression><![CDATA["Puntos Maximos EFQM: "+$F{sumPointsMax}]]></textFieldExpression>
@@ -37,9 +38,10 @@ where
 				<textFieldExpression><![CDATA["Porcentaje EFQM: "+$F{porc} + "%"]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="27" y="50" width="500" height="140" uuid="77167549-751b-4921-a758-1d577323429b"/>
+				<reportElement positionType="Float" x="27" y="70" width="500" height="140" uuid="77167549-751b-4921-a758-1d577323429b"/>
+				<box topPadding="0" leftPadding="0" bottomPadding="0" rightPadding="0"/>
 				<textElement textAlignment="Center">
-					<font size="24" isBold="true"/>
+					<font fontName="SansSerif" size="27" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[IF($F{sumPointsEfqm}.intValue() < 200,"No certifica",IF($F{sumPointsEfqm}.intValue() <=300, "Compromiso con la excelencia (2 Estrellas)",IF($F{sumPointsEfqm}.intValue() < 401 , "Reconocimiento a la excelencia (3 Estrellas)", IF($F{sumPointsEfqm}.intValue() <= 500 , "Reconocimiento a la excelencia (4 Estrellas)" , "Reconocimiento a la excelencia (5 Estrellas)" ) ) ) )]]></textFieldExpression>
 			</textField>

@@ -44,9 +44,27 @@ public class ControllerImprovements {
             period = view.getPeriod();
             List<Improvements> listImprovements = repositoryImprovements.getAll(period);
             for (Improvements improvement : listImprovements) {
-                Object[] row = new Object[2];
+                Object[] row = new Object[4];
+                String priority = "";
+                String status = "";
                 row[0] = improvement.getIdimprovements();
                 row[1] = improvement.getTitle();
+                if(improvement.getPriority() == 1) {
+                    priority = "Baja";
+                } else if(improvement.getPriority() == 2){
+                    priority = "Media";
+                } else {
+                    priority = "Alta";
+                }
+                row[2] = priority;
+                if(improvement.getStatus()== 1) {
+                    status = "Sin tratar";
+                } else if(improvement.getStatus() == 2){
+                    status = "En progreso";
+                } else {
+                    status = "Finalizado";
+                }
+                row[3] = status;
                 view.getModel().addRow(row);
             }
             view.getTable().setModel(view.getModel());
