@@ -5128,7 +5128,6 @@ INSERT INTO `responses_people` VALUES ('3116', 'a67eee16-0a86-4f46-a6a6-0ad7cfd3
 -- 
 -- AVERAGE_RESPONSES
 --
-INSERT INTO `average_responses` VALUES ('1045', '27', '71', '107', '0.00', '3');
 INSERT INTO `average_responses` VALUES ('1051', '28', '72', '110', '41.67', '7');
 INSERT INTO `average_responses` VALUES ('1052', '28', '73', '111', '100.00', '7');
 INSERT INTO `average_responses` VALUES ('1053', '28', '74', '112', '100.00', '7');

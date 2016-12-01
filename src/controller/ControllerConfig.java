@@ -281,6 +281,7 @@ public class ControllerConfig {
                 pCSPQuestion.setPeriod_criteria(view.getIdPeriodCriteria());
                 pCSPQuestion.setPeriod(view.getIdPeriod());
                 repositoryPCSPQuestion.save(pCSPQuestion);
+                view.getTxtQuestion().setText("");
                 JOptionPane.showMessageDialog(view, "La configuracion fue almacenada.", "Informacion", JOptionPane.INFORMATION_MESSAGE);
             } catch (Exception ex) {
                 ex.printStackTrace();

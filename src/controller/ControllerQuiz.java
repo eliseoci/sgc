@@ -125,6 +125,6 @@ public class ControllerQuiz {
         repositoryResponse.insertAllResponses(responses);
         repositoryAverage.averageByResponses(new AverageByResponses(view.getIdPeriod(), GUID));
         JOptionPane.showMessageDialog(view, "Respuestas guardadas con éxito", "Éxito", JOptionPane.INFORMATION_MESSAGE);
-        logger.trace("Respuestas insertadas");
+        logger.trace("Encuesta completada en período " + view.getIdPeriod());
     }
 }

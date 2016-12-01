@@ -19,6 +19,8 @@ import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.util.JRLoader;
 import net.sf.jasperreports.view.JasperViewer;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import repository.RepositoryAverage;
 import repository.RepositoryPeriod;
 import view.improvement.ListImprovement;
@@ -31,6 +33,7 @@ import view.quiz.FormQuiz;
  */
 public class ControllerSelected {
 
+    private static final Logger logger = LogManager.getLogger(ControllerSelected.class);
     private RepositoryPeriod repositoryPeriod;
     private RepositoryAverage repositoryAverage;
 
@@ -74,6 +77,7 @@ public class ControllerSelected {
                             if (repositoryPeriod.existsPeriod(idPeriod) == 1) {
                                 repositoryAverage.processData(idPeriod);
                                 JOptionPane.showMessageDialog(view, "Período procesado con éxito", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+                                logger.trace("El periodo " + idPeriod + "ha sido procesado");
                             } else {
                                 JOptionPane.showMessageDialog(view, "Este Periodo ya fue procesado.", "Error", JOptionPane.ERROR_MESSAGE);
                             }
