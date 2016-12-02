@@ -5996,10 +5996,8 @@ INSERT INTO `average_process` VALUES ('264', '159', '103', '36', '7', '0.00', '1
 -- -----------------------------------------------------
 -- CREATING USER AND ASSIGNING PERMISSIONS
 -- -----------------------------------------------------
-DROP USER 'sgc'@'localhost';
+GRANT ALL ON `sgc_efqm`.* TO 'sgc'@'localhost' IDENTIFIED BY 'sgc';
 FLUSH PRIVILEGES;
-CREATE USER 'sgc'@'localhost' IDENTIFIED BY 'sgc';
-GRANT ALL ON `sgc_efqm`.* TO 'sgc'@'localhost';
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
